@@ -144,7 +144,7 @@ class Company < ActiveRecord::Base
     else
       url = "http://"
     end
-    url += subdomain + "." + $CONFIG[:domain]
+    url += $CONFIG[:domain]
   end
 
   # Returns a list of property values which should be considered

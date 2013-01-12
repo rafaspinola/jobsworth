@@ -10,11 +10,18 @@ $CONFIG = {
        :SSL => false
 }
 
-ActionMailer::Base.smtp_settings = {
-  :address  => "localhost",
-  :port  => 25,
-  :domain  => 'getjobsworth.org'
-}
+Jobsworth::Application.configure do
+  config.action_mailer.smtp_settings = {
+    :address  => '',
+    :port  => 587,
+    :domain  => '',
+    :user_name => '',
+    :password => '',
+    :authentication => 'plain',
+    :enable_starttls_auto => true
+  }
+end
+
 
 # Setup email notification of errors
 Jobsworth::Application.config.middleware.use ExceptionNotifier,

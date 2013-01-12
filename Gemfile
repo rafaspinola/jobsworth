@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "3.2.8"
+gem "rails", "3.2.11"
 
 gem 'daemons'
 gem "will_paginate"
@@ -52,6 +52,8 @@ end
 
 group :test, :development do
   gem "machinist",        '1.0.6'
+  gem "debugger"
+  gem 'rb-readline'  
 end
 
 group :test do

@@ -57,5 +57,15 @@ module Jobsworth
       end
     end
 
+    config.action_mailer.smtp_settings = {
+      :address  => "smtp.gmail.com",
+      :port  => 587,
+      :domain  => 'candiottoefonseca.com.br',
+      :user_name => "clocking-it@candiottoefonseca.com.br",
+      :password => 'clocking2727',
+      :authentication => 'plain',
+      :enable_starttls_auto => true
+    }
+
   end
 end

@@ -25,8 +25,11 @@ namespace :deploy do
 
   task :custom_symlinks do
     run "rm -rf #{release_path}/config/database.yml"
+    run "rm -rf #{release_path}/config/environment.local.rb"
+    run "rm -rf #{release_path}/config/application.rb"
     run "ln -s #{shared_path}/database.yml #{release_path}/config/database.yml"
     run "ln -s #{shared_path}/environment.local.rb #{release_path}/config/environment.local.rb"
+    run "ln -s #{shared_path}/application.rb #{release_path}/config/application.rb"
   end
 
   namespace :assets do

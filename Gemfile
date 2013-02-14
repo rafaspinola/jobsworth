@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem "rails", "3.2.11"
 
@@ -37,12 +37,12 @@ platforms :ruby do
   gem 'mysql2'
 end
 
-platforms :mri do
-  group :test do
-    gem 'ruby-prof'
-  end
-end
-  
+# platforms :mri do
+#   group :test do
+#     gem 'ruby-prof'
+#   end
+# end
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -53,7 +53,7 @@ end
 group :test, :development do
   gem "machinist",        '1.0.6'
   gem "debugger"
-  gem 'rb-readline'  
+  gem 'rb-readline'
 end
 
 group :test do

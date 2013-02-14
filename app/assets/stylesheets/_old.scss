@@ -202,9 +202,8 @@ li.help {
 
 .waiting_deferred {
   a, small {
-    color: #a6a6a6;
+    color: #000;
   }
-
 }
 
 textarea.small {
@@ -320,7 +319,7 @@ select#chngroup {
   }
 
 }
-  
+
 @media print {
   .page_header, .contact, #reports_config {
     display: none;

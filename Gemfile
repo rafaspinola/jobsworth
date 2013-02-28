@@ -19,7 +19,7 @@ gem "rufus-scheduler"
 gem 'net-ldap'
 gem 'devise'
 gem 'devise-encryptable'
-gem 'jquery-rails'
+gem 'jquery-rails', '2.1.3'
 gem 'closure-compiler'
 gem 'delayed_job_active_record'
 gem 'cocaine'

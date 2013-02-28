@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = @project_relation
-                .in_progress.order('customer_id')
+                .in_progress.order('customers.name')
                 .includes(:customer, :milestones)
                 .paginate(:page => params[:page], :per_page => 100)
 

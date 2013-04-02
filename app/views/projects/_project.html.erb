@@ -1,6 +1,7 @@
 <div class="project">
 
 <div class="clearfix title">
+  <%= project.name %><br />
   <%= link_to_tasks_filtered_by project, :class => "pull-left name" %>
   <div class="progress">
     <div class="bar" style="width:<%= number_to_percentage(project.progress, :precision => 0) %>;"> </div>

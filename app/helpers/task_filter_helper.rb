@@ -91,6 +91,9 @@ module TaskFilterHelper
 
   def link_to_tasks_filtered_by(*args)
     name= args.first.is_a?(String) ? args.shift : args.first.name
+    project= args.first.is_a?(Project) ? args.first : nil
+    customer= project == nil ? nil : project.customer
+    name= customer.name unless customer == nil
     object= args.first
     html_options=args.second
     open = current_user.company.statuses.first

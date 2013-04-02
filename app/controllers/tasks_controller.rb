@@ -442,6 +442,198 @@ class TasksController < ApplicationController
     render :json => { :html => html, :has_more => (@user.tasks.open_only.not_snoozed.count > params[:count].to_i) }
   end
 
+  # Relatório antigo
+
+  def filter
+    do_filter
+    redirect_to :controller => 'tasks', :action => 'list'
+  end
+
+  def list
+    @tags = {}
+    @tags.default = 0
+    @tags_total = 0
+    if session[:filter_project].to_i == 0
+      project_ids = current_project_ids
+    else
+      project_ids = session[:filter_project]
+    end
+
+    filter = ""
+
+    if session[:filter_user].to_i > 0
+      task_ids = User.find(session[:filter_user].to_i).tasks.collect { |t| t.id }.join(',')
+      if task_ids == ''
+        filter = "tasks.id IN (0) AND "
+      else
+        filter = "tasks.id IN (#{task_ids}) AND "
+      end
+    elsif session[:filter_user].to_i < 0
+      not_task_ids = Task.find(:all, :select => "tasks.*", :joins => "LEFT OUTER JOIN task_owners t_o ON tasks.id = t_o.task_id", :readonly => false, :conditions => ["tasks.company_id = ? AND t_o.id IS NULL", current_user.company_id]).collect { |t| t.id }.join(',')
+      if not_task_ids == ''
+        filter = "tasks.id = 0 AND "
+      else
+        filter = "tasks.id IN (#{not_task_ids}) AND " if not_task_ids != ""
+      end
+    end
+
+    if session[:filter_milestone].to_i > 0
+      filter << "tasks.milestone_id = #{session[:filter_milestone]} AND "
+    elsif session[:filter_milestone].to_i < 0
+      filter << "(tasks.milestone_id IS NULL OR tasks.milestone_id = 0) AND "
+    end
+
+    unless session[:filter_status].to_i == -1 || session[:filter_status].to_i == -2
+      if session[:filter_status].to_i == 0
+        filter << "(tasks.status = 0 OR tasks.status = 1) AND "
+      elsif session[:filter_status].to_i == 2
+        filter << "(tasks.status > 1) AND "
+      else
+        filter << "tasks.status = #{session[:filter_status].to_i} AND "
+      end
+    end
+
+    if session[:filter_status].to_i == -2
+      filter << "tasks.hidden = 1 AND "
+    else
+      filter << "tasks.hidden = 0 AND "
+    end
+
+    if session[:hide_deferred].to_i > 0
+      filter << "(tasks.hide_until IS NULL OR tasks.hide_until < '#{tz.now.utc.to_s(:db)}') AND "
+    end
+
+    unless session[:filter_type].to_i == -1
+      filter << "tasks.type_id = #{session[:filter_type].to_i} AND "
+    end
+
+    unless session[:filter_severity].to_i == -10
+      filter << "tasks.severity_id >= #{session[:filter_severity].to_i} AND "
+    end
+
+    unless session[:filter_priority].to_i == -10
+      filter << "tasks.priority >= #{session[:filter_priority].to_i} AND "
+    end
+
+    unless session[:filter_customer].to_i == 0
+      filter << "tasks.project_id IN (#{current_user.projects.find(:all, :conditions => ["customer_id = ?", session[:filter_customer]]).collect(&:id).compact.join(',') }) AND "
+    end
+
+    completed_milestone_ids_str = "#{completed_milestone_ids}".gsub(/[\[\]]/, '')
+    filter << "(tasks.milestone_id NOT IN (#{completed_milestone_ids_str}) OR tasks.milestone_id IS NULL) "
+
+    if params[:tag] && params[:tag].length > 0
+      # Looking for tasks based on tags
+      @selected_tags = params[:tag].downcase.split(',').collect{|t| t.strip}
+      @tasks = AbstractTask.tagged_with(@selected_tags, { :company_id => current_user.company_id, :project_ids => project_ids, :filter_hidden => session[:filter_hidden], :filter_user => session[:filter_user], :filter_milestone => session[:filter_milestone], :filter_status => session[:filter_status], :filter_customer => session[:filter_customer] })
+    else
+      # Looking for tasks based on filters
+      @selected_tags = []
+      project_ids_str = "#{project_ids}".gsub(/[\[\]]/, '')
+      @tasks = AbstractTask.find(:all, :conditions => "tasks.project_id IN (#{project_ids_str}) AND " + filter, :include => [:users, :tags, :sheets, :todos, :dependencies, {:dependants => [:users, :tags, :sheets, :todos, { :project => :customer }, :milestone]}, { :project => :customer}, :milestone ])
+    end
+
+    @tasks = case session[:sort].to_i
+             when 0
+                 @tasks.sort_by{|t| [-t.completed_at.to_i, t.priority + t.severity_id/2.0, -(t.due_date || 9999999999).to_i, -t.task_num] }.reverse
+             when 1
+                 @tasks.sort_by{|t| [-t.completed_at.to_i, (t.due_date || 9999999999).to_i, t.priority + t.severity_id/2.0,  -t.task_num] }
+             when 2
+                 @tasks.sort_by{|t| [-t.completed_at.to_i, t.created_at.to_i, t.priority + t.severity_id/2.0,  -t.task_num] }
+             when 3
+                 @tasks.sort_by{|t| [-t.completed_at.to_i, t.name.downcase, t.priority + t.severity_id/2.0,  -t.task_num] }
+             when 4
+                 @tasks.sort_by{|t| [-t.completed_at.to_i, t.updated_at.to_i, t.priority + t.severity_id/2.0,  -t.task_num] }.reverse
+             end
+
+    # Most popular tags, currently unlimited.
+    debugger
+    user_company = Company.find(current_user.company_id)
+    @all_tags = Tag.top_counts(user_company, {:company_id => current_user.company_id, :project_ids => project_ids, :filter_hidden => session[:filter_hidden], :filter_customer => session[:filter_customer]})
+    @group_ids = { }
+    if session[:group_by].to_i == 1 # tags
+      @tag_names = @all_tags.collect{|i,j| i}
+      @groups = Task.tag_groups(current_user.company_id, @tag_names, @tasks)
+    elsif session[:group_by].to_i == 2 # Clients
+      clients = Customer.find(:all, :conditions => ["company_id = ?", current_user.company_id], :order => "name")
+      clients.each { |c| @group_ids[c.name] = c.id }
+      items = clients.collect(&:name).sort
+      @groups = Task.group_by(@tasks, items) { |t,i| t.project.customer.name == i }
+    elsif session[:group_by].to_i == 3 # Projects
+      projects = current_user.projects
+      projects.each { |p| @group_ids[p.full_name] = p.id }
+      items = projects.collect(&:full_name).sort
+      @groups = Task.group_by(@tasks, items) { |t,i| t.project.full_name == i }
+    elsif session[:group_by].to_i == 4 # Milestones
+      filter = ""
+      if session[:filter_milestone].to_i > 0
+        m = Milestone.find(session[:filter_milestone], :conditions => ["project_id IN (#{current_project_ids}) AND completed_at IS NULL"], :order => "due_at, name") rescue nil
+        filter = " AND project_id = #{m.project_id}" if m
+      elsif session[:filter_project].to_i > 0
+        filter = " AND project_id = #{session[:filter_project]}"
+      elsif session[:filter_customer].to_i > 0
+        pids = current_user.company.customers.find(session[:filter_customer]).projects.collect{|p| p.id}.join(',') rescue '0'
+        filter = " AND project_id IN (#{pids})"
+      end
+      milestones = Milestone.find(:all, :conditions => ["company_id = ? AND project_id IN (#{current_project_ids})#{filter} AND completed_at IS NULL", current_user.company_id], :order => "due_at, name")
+      milestones.each { |m| @group_ids[m.name + " / " + m.project.name] = m.id }
+      @group_ids['Unassigned'] = 0
+      items = ["Unassigned"] +  milestones.collect{ |m| m.name + " / " + m.project.name }
+      @groups = Task.group_by(@tasks, items) { |t,i| (t.milestone ? (t.milestone.name + " / " + t.project.name) : "Unassigned" ) == i }
+    elsif session[:group_by].to_i == 5 # Users
+      users = current_user.company.users
+      users.each { |u| @group_ids[u.name] = u.id }
+      @group_ids[_('Unassigned')] = 0
+      items = [_("Unassigned")] + users.collect(&:name).sort
+      @groups = Task.group_by(@tasks, items) { |t,i|
+        if t.users.size > 0
+          res = t.users.collect(&:name).include? i
+        else
+          res = (_("Unassigned") == i)
+        end
+        res
+      }
+    elsif session[:group_by].to_i == 6 # Task Type
+      0.upto(3) { |i| @group_ids[ _(Task.issue_types[i]) ] = i }
+      items = Task.issue_types.collect{ |i| _(i) }.sort
+      @groups = Task.group_by(@tasks, items) { |t,i| _(t.issue_type) == i }
+    elsif session[:group_by].to_i == 7 # Status
+      0.upto(5) { |i| @group_ids[ _(Task.status_types[i]) ] = i }
+      items = Task.status_types.collect{ |i| _(i) }
+      @groups = Task.group_by(@tasks, items) { |t,i| _(t.status_type) == i }
+    elsif session[:group_by].to_i == 8 # Severity
+      -2.upto(3) { |i| @group_ids[_(Task.severity_types[i])] = i }
+      items = Task.severity_types.sort.collect{ |v| _(v[1]) }.reverse
+      @groups = Task.group_by(@tasks, items) { |t,i| _(t.severity_type) == i }
+    elsif session[:group_by].to_i == 9 # Priority
+      -2.upto(3) { |i| @group_ids[ _(Task.priority_types[i])] = i }
+      items = Task.priority_types.sort.collect{ |v| _(v[1]) }.reverse
+      @groups = Task.group_by(@tasks, items) { |t,i| _(t.priority_type) == i }
+    elsif session[:group_by].to_i == 10 # Projects / Milestones
+      milestones = Milestone.find(:all, :conditions => ["company_id = ? AND project_id IN (#{current_project_ids}) AND completed_at IS NULL", current_user.company_id], :order => "due_at, name")
+      projects = current_user.projects
+
+      milestones.each { |m| @group_ids["#{m.project.name} / #{m.name}"] = "#{m.project_id}_#{m.id}" }
+      projects.each { |p| @group_ids["#{p.name}"] = p.id }
+
+      items = milestones.collect{ |m| "#{m.project.name} / #{m.name}" }.flatten
+      items += projects.collect(&:name)
+      items = items.uniq.sort
+
+      @groups = Task.group_by(@tasks, items) { |t,i| t.milestone ? ("#{t.project.name} / #{t.milestone.name}" == i) : (t.project.name == i)  }
+    elsif session[:group_by].to_i == 11 # Requested By
+      requested_by = @tasks.collect{|t| t.requested_by.blank? ? nil : t.requested_by }.compact.uniq.sort
+      requested_by = [_('No one')] + requested_by
+      @groups = Task.group_by(@tasks, requested_by) { |t,i| (t.requested_by.blank? ? _('No one') : t.requested_by) == i }
+    else
+      @groups = [@tasks]
+    end
+
+  end
+
+  # Fim Relatório antigo
+
+
   protected
 
   def check_if_user_can_create_task
@@ -459,6 +651,39 @@ class TasksController < ApplicationController
       flash[:error] = _("You need to create a project to hold your tasks.")
       redirect_to new_project_path
     end
+  end
+
+  def do_filter
+
+    f = params[:filter]
+
+    if f.nil? || f.empty? || f == "0"
+      session[:filter_customer] = "0"
+      session[:filter_milestone] = "0"
+      session[:filter_project] = "0"
+    elsif f[0..0] == 'c'
+      session[:filter_customer] = f[1..-1]
+      session[:filter_milestone] = "0"
+      session[:filter_project] = "0"
+    elsif f[0..0] == 'p'
+      session[:filter_customer] = "0"
+      session[:filter_milestone] = "0"
+      session[:filter_project] = f[1..-1]
+    elsif f[0..0] == 'm'
+      session[:filter_customer] = "0"
+      session[:filter_milestone] = f[1..-1]
+      session[:filter_project] = "0"
+    elsif f[0..0] == 'u'
+      session[:filter_customer] = "0"
+      session[:filter_milestone] = "-1"
+      session[:filter_project] = f[1..-1]
+    end
+
+    [:filter_user, :filter_hidden, :filter_status, :group_by, :hide_deferred, :hide_dependencies, :sort, :filter_type, :filter_severity, :filter_priority].each do |filter|
+      session[filter] = params[filter]
+    end
+
+    session[:last_project_id] = session[:filter_project]
   end
 
 ############### This methods extracted to make Template Method design pattern #############################################3

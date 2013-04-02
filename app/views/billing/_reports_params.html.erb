@@ -16,14 +16,14 @@
 
     <label for="report[filter_project]"><%=_ 'Report filter' %></label>
     <% if current_user.projects.any? %>
-      <select name="report[filter_project]"> 
+      <select name="report[filter_project]">
         <option value="0" class="select_default"><%= _("[Any Project]") %></option>
         <% projects = current_user.projects.includes(:customer).except(:order).order("customers.name, projects.name") %>
         <% client_projects = grouped_client_projects_options(projects)%>
         <% client_projects.each do |c| %>
-          <optgroup class="select_heading" label="<%= c.first %>">
+          <optgroup class="select_heading" label="<%= p.first %>">
           <% c.last.each do |p| %>
-            <option value="<%=p.last%>" class="select_item"<%= " selected" if params[:report] && p.last.to_s == params[:report][:filter_project] %>><%= p.first %></option>
+            <option value="<%=p.last%>" class="select_item"<%= " selected" if params[:report] && p.last.to_s == params[:report][:filter_project] %>><%= c.first %></option>
           <% end %>
           </optgroup>
         <% end %>
@@ -49,7 +49,7 @@
         {
           :id => 'start_date',
           :size => 12,
-          :placeholder => "From", 
+          :placeholder => "From",
           :value => (params[:report] && params[:report][:start_date]) ? params[:report][:start_date] : ""
         }
       %>
@@ -57,7 +57,7 @@
         {
           :id => 'stop_date',
           :size => 12,
-          :placeholder => "To", 
+          :placeholder => "To",
           :value => (params[:report] && params[:report][:stop_date]) ? params[:report][:stop_date] : ""}
       %>
       <br/>

@@ -12,7 +12,7 @@ Jobsworth::Application.routes.draw do
 
   devise_for :users,
              :path_prefix => "auth",
-             :controllers => { :sessions  => "auth/sessions", 
+             :controllers => { :sessions  => "auth/sessions",
                                 :passwords => "auth/passwords" }
 
   resources :users, :except => [:show]
@@ -42,6 +42,8 @@ Jobsworth::Application.routes.draw do
   get 'tasks/:id' => "tasks#edit", :constraints => {:id => /\d+/}
   get "tasks/view/:id" => "tasks#edit", :as => :task_view
   get "tasks/nextTasks/:count" => "tasks#nextTasks", :defaults => { :count => 5 }
+  get "tasks/list" => "tasks#list"
+  post "tasks/filter" => "tasks#filter"
   resources :tasks, :except => [:show] do
     collection do
       post 'change_task_weight'
@@ -88,7 +90,7 @@ Jobsworth::Application.routes.draw do
     match :toggle_done, :on => :member
   end
 
-  resources :work_logs do 
+  resources :work_logs do
     match :update_work_log, :on=> :member
   end
 

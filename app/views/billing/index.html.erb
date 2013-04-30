@@ -73,6 +73,15 @@
           <td class="row_subtotal"><%= TimeParser.format_duration(@total) %></td>
         </tr>
       <% end %>
+
+      <!-- column totals for timesheet -->
+      <% if params[:report] && params[:report][:type] == "3" %>
+        <tr class="<%=cycle('even', 'odd')%>">
+          <td colspan="<%= @column_headers.length %>">Grand Total</td>
+          <td class="row_subtotal"><%= TimeParser.format_duration(@total) %></td>
+        </tr>
+      <% end %>
+
     <% end %>
   <% end %>
 </table>

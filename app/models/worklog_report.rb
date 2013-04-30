@@ -242,7 +242,7 @@ class WorklogReport
         w.available_custom_attributes.each do |ca|
           columns << "ca_#{ ca.id }"
         end
-        columns << 21
+        # columns << 21
 
         columns.each do |k|
           key = key_from_worklog(w, k)

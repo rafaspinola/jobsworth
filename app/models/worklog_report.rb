@@ -399,7 +399,7 @@ class WorklogReport
     elsif key == "4_user"
       do_row(rkey, row_name, key, w.user.name)
     elsif key == "5_note"
-      body = h(w.body)
+      body = h(w.work_log_kind.description) unless w.work_log_kind == nil
       body.gsub!(/\n/, " <br/>") if body
       do_row(rkey, row_name, key, body)
     elsif key == "6_approved"

@@ -5,6 +5,11 @@
   </button>
   <ul class="dropdown-menu">
     <li><b style="padding-left:5px;">Save and log...</b></li>
+<% @work_log_kinds.each do |w| %>
+    <li>
+      <%= check_box_tag :kind, w.id %><%= w.description %>
+    </li>
+<% end %>
     <li id='worklog-elapsed'>
       <a href='#'></a>
     </li>
@@ -16,3 +21,12 @@
     </li>
   </ul>
 </div>
+<script>
+jQuery(function(){
+  jQuery('#save-dropdown input').click(function(e){
+    jQuery('#save-dropdown input').not(jQuery(this)).removeAttr("checked");
+    jQuery(this).attr("checked", jQuery(this).attr("checked"));
+    e.stopPropagation();
+  });
+});
+</script>

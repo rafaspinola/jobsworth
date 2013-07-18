@@ -22,6 +22,7 @@ class WorkLog < ActiveRecord::Base
   belongs_to :customer
   belongs_to :task, :class_name=>"AbstractTask", :foreign_key=>'task_id'
   belongs_to :access_level
+  belongs_to :work_log_kind, :foreign_key => 'kind'
 
   has_one    :ical_entry, :dependent => :destroy
   has_one    :event_log, :as => :target, :dependent => :destroy
@@ -140,6 +141,7 @@ class WorkLog < ActiveRecord::Base
       work_log_params[:company]= task.company
       work_log_params[:project] = task.project
       work_log_params[:customer] = (task.customers.first || task.project.customer)
+      work_log_params[:kind] = params[:kind]
 
       work_log = task.work_logs.build(work_log_params)
       event_log = work_log.create_event_log(

@@ -17,6 +17,8 @@ class TasksController < ApplicationController
     session[:jqgrid_sort_order] = params[:sord] unless params[:sord].nil?
     @tasks = current_task_filter.tasks_for_jqgrid(params)
 
+    @work_log_kinds = WorkLogKind.all
+
     respond_to do |format|
       format.html
       format.json { render :template => "tasks/index.json"}
@@ -144,6 +146,7 @@ class TasksController < ApplicationController
 
     set_last_task(@task)
     @task.set_task_read(current_user)
+    @work_log_kinds = WorkLogKind.all
 
     respond_to do |format|
       format.html { render :template=> 'tasks/edit'}
@@ -547,7 +550,7 @@ class TasksController < ApplicationController
              end
 
     # Most popular tags, currently unlimited.
-    debugger
+    # debugger
     user_company = Company.find(current_user.company_id)
     @all_tags = Tag.top_counts(user_company, {:company_id => current_user.company_id, :project_ids => project_ids, :filter_hidden => session[:filter_hidden], :filter_customer => session[:filter_customer]})
     @group_ids = { }

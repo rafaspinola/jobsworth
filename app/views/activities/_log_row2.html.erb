@@ -16,6 +16,10 @@
         <%= link_to "(#{TimeParser.format_duration(log.duration)} worked)", edit_work_log_path(log) %>
       </span>
     <% end %>
+
+    <% unless log.work_log_kind == nil %>
+      <span class="kind_box" style="background-color: <%= log.work_log_kind.color %>;"><%= log.work_log_kind.description %></span>
+    <% end %>
   </div>
 
   <h4 class="log_name">

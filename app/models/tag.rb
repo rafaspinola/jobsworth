@@ -40,7 +40,7 @@ class Tag < ActiveRecord::Base
     EOS
     ids_and_counts = connection.select_rows(sql)
 
-    debugger
+    # debugger
     res = ids_and_counts.map do |id, count|
       [ company.tags.detect { |t| t.id == id.to_i }, count.to_i ]
       end

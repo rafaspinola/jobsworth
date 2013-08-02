@@ -21,9 +21,14 @@
         <% projects = current_user.projects.includes(:customer).except(:order).order("customers.name, projects.name") %>
         <% client_projects = grouped_client_projects_options(projects)%>
         <% client_projects.each do |c| %>
-          <optgroup class="select_heading" label="<%= p.first %>">
-          <% c.last.each do |p| %>
-            <option value="<%=p.last%>" class="select_item"<%= " selected" if params[:report] && p.last.to_s == params[:report][:filter_project] %>><%= c.first %></option>
+          <% if c.last.count > 1 then %>
+            <optgroup class="select_heading" label="<%= c.first %>">
+            <% c.last.each do |p| %>
+              <option value="<%=p.last%>" class="select_item"<%= " selected" if params[:report] && p.last.to_s == params[:report][:filter_project] %>><%= p.first %></option>
+            <% end %>
+          <% else %>
+            <optgroup class="select_heading" label="<%= c.last.first.first %>">
+              <option value="<%=c.last.first.last%>" class="select_item"<%= " selected" if params[:report] && c.last.first.last.to_s == params[:report][:filter_project] %>><%= c.first %></option>
           <% end %>
           </optgroup>
         <% end %>

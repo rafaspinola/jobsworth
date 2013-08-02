@@ -222,7 +222,7 @@ class WorklogReport
               @column_headers[ key ] = name_from_worklog( tag, @column_value )
               @column_totals[ key ] ||= 0
             end
-            do_column(w, key)
+            do_column(w, key, @type)
           end
         else
           key = key_from_worklog(w, @column_value).to_s
@@ -233,7 +233,7 @@ class WorklogReport
             end
             @column_totals[ key ] ||= 0
           end
-          do_column(w, key)
+          do_column(w, key, @type)
         end
 
       when WorklogReport::TIMESHEET
@@ -250,7 +250,7 @@ class WorklogReport
             @column_headers[ key ] = name_from_worklog( w, k )
             @column_totals[ key ] ||= 0
           end
-          do_column(w, key)
+          do_column(w, key, @type)
         end
       end
     end
@@ -370,7 +370,7 @@ class WorklogReport
   end
 
 
-  def do_column(w, key)
+  def do_column(w, key, type)
     @column_totals[ key ] += w.duration unless ["comment", "1_start", "2_end", "3_task", "4_note"].include?(key)
 
     rkey = key_from_worklog(w, 15).to_s
@@ -399,7 +399,17 @@ class WorklogReport
     elsif key == "4_user"
       do_row(rkey, row_name, key, w.user.name)
     elsif key == "5_note"
-      body = h(w.work_log_kind.description) unless w.work_log_kind == nil
+      # Rafa: Mudado para listar os tipos de atividade
+      case type
+      when 1 # Pivot
+        body = h(w.work_log_kind.description) unless w.work_log_kind == nil
+      when WorklogReport::TIMESHEET
+        body = ''
+        if w.work_log_kind != nil
+          body = "<span style=\"color: #{w.work_log_kind.color}; font-weight: bold;\">#{h(w.work_log_kind.description)}</span><br />"
+        end
+        body += w.body unless w.body == nil
+      end
       body.gsub!(/\n/, " <br/>") if body
       do_row(rkey, row_name, key, body)
     elsif key == "6_approved"

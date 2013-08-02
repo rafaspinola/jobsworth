@@ -50,11 +50,11 @@ group :assets do
   gem 'bootstrap-sass', '2.0.4'
 end
 
-# group :test, :development do
-#   gem "machinist",        '1.0.6'
-#   gem "debugger"
-#   gem 'rb-readline'
-# end
+group :test, :development do
+  gem "machinist",        '1.0.6'
+  gem "debugger"
+  gem 'rb-readline'
+end
 
 group :test do
   gem "shoulda", :require => false

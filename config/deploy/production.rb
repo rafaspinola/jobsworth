@@ -1,4 +1,4 @@
-server "cfadv.dysdynamic.com", :app, :web, :db, :primary => true
+server "cfadv.dnsdynamic.com", :app, :web, :db, :primary => true
 set :deploy_to, "/home/#{user}/#{application}"
 set :port, 6622
 set :port_option, " -e 'ssh -p 6622' "

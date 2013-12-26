@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715130942) do
+ActiveRecord::Schema.define(:version => 20131223181248) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -802,9 +802,10 @@ ActiveRecord::Schema.define(:version => 20130715130942) do
 
   create_table "work_log_kinds", :force => true do |t|
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "color"
+    t.boolean  "notime",      :default => false
   end
 
   create_table "work_logs", :force => true do |t|

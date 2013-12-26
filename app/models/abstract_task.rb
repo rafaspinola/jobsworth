@@ -630,6 +630,10 @@ private
       params[:task].delete(:wait_for_customer)
     end
 
+    # Caso o tipo de comentário tenha parâmetro notime, não registra duração
+    wlk = WorkLogKind.find params[:kind]
+    params[:work_log].delete(:duration) if wlk.notime
+
     self.attributes = params[:task]
 
     if self.service_id == -1

@@ -57,11 +57,16 @@ jobsworth.tasks.TaskTimer = (function(){
 
       // drop-down elements behaviour
       $li_elapsed.click(function() {
-          var minutes = Math.floor(self.total_milliseconds / 60000 ) % 60;
-          var hours = Math.floor(self.total_milliseconds / 3600000);
+          // Verificando se há categoria marcada
+          if ($('#kind:checked').length == 1) {
+              var minutes = Math.floor(self.total_milliseconds / 60000 ) % 60;
+              var hours = Math.floor(self.total_milliseconds / 3600000);
 
-          $('#taskform input[name="work_log[duration]"]').val(hours + 'h' + minutes + 'm');
-          $form.submit();
+              $('#taskform input[name="work_log[duration]"]').val(hours + 'h' + minutes + 'm');
+              $form.submit();
+          } else {
+              alert('Escolha uma categoria');
+          }
       });
 
       $li_none.click(function() {
@@ -90,11 +95,16 @@ jobsworth.tasks.TaskTimer = (function(){
 
 
       $("button.save", $dialog).click(function(e) {
-        $('input[name^="work_log"]', $form).remove();
-        $dialog.modal('hide');
-        $dialog.addClass("none").appendTo($form);
-        $form.submit();
-        return false;
+        // Verificando se há categoria marcada
+        if ($('#kind:checked').length == 1) {
+          $('input[name^="work_log"]', $form).remove();
+          $dialog.modal('hide');
+          $dialog.addClass("none").appendTo($form);
+          $form.submit();
+          return false;
+        } else {
+          alert('Escolha uma categoria');
+        }
       })
   }
 

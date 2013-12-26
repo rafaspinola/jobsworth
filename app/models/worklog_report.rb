@@ -67,7 +67,7 @@ class WorklogReport
 
     init_start_and_end_dates(params)
     init_work_logs(tasks, params)
-    init_rows_and_columns
+    init_rows_and_columns(params)
     init_csv
   end
 
@@ -193,7 +193,7 @@ class WorklogReport
   # Sets up the column_headers, column_totals, rows, row_totals
   # and total instance vars
   ###
-  def init_rows_and_columns
+  def init_rows_and_columns(params)
     @total = 0
     @row_totals = { }
     @column_totals = { }
@@ -250,7 +250,7 @@ class WorklogReport
             @column_headers[ key ] = name_from_worklog( w, k )
             @column_totals[ key ] ||= 0
           end
-          do_column(w, key, @type)
+          do_column(w, key, @type, params[:hide_comments])
         end
       end
     end
@@ -370,7 +370,7 @@ class WorklogReport
   end
 
 
-  def do_column(w, key, type)
+  def do_column(w, key, type, hide_comments = 0)
     @column_totals[ key ] += w.duration unless ["comment", "1_start", "2_end", "3_task", "4_note"].include?(key)
 
     rkey = key_from_worklog(w, 15).to_s
@@ -408,7 +408,7 @@ class WorklogReport
         if w.work_log_kind != nil
           body = "<span style=\"color: #{w.work_log_kind.color}; font-weight: bold;\">#{h(w.work_log_kind.description)}</span><br />"
         end
-        body += w.body unless w.body == nil
+        body += w.body unless (w.body == nil || (hide_comments.to_i > 0))
       end
       body.gsub!(/\n/, " <br/>") if body
       do_row(rkey, row_name, key, body)

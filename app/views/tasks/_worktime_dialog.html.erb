@@ -44,6 +44,16 @@
              :size => 10, :rel => 'tooltip', :title => _('3h 4m'), "data-placement" => "right") %>
         </div>
       </div>
+
+      <div class="control-group">
+        <ul>
+          <% @work_log_kinds.each do |w| %>
+            <li>
+              <%= check_box_tag :kind, w.id %><%= w.description %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </fieldset>
   </div>
 

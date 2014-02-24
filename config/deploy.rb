@@ -1,4 +1,4 @@
-set :stages, %w(production staging local)
+set :stages, %w(production staging local candiotto)
 set :default_stage, "staging"
 
 require 'capistrano/ext/multistage'

@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   def index
     @users = User.where("users.company_id = ?", current_user.company_id)
+                 .where(:active => true)
                  .includes(:project_permissions => {:project => :customer})
                  .order("users.name")
                  .paginate(:page => params[:page], :per_page => 100)

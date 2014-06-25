@@ -169,7 +169,7 @@ module TasksHelper
     task_due_at = task.due_at.nil? ? "" : task.due_at.utc.strftime(current_user.date_format)
     milestone_due_at = task.milestone.try(:due_at)
     placeholder = milestone_due_at.nil? ? "" : milestone_due_at.strftime(current_user.date_format)
-    date_tooltip = (task.due_at.nil? and !milestone_due_at.nil?) ? "Target date from milestone" : "The target date for when you want this task to be started."
+    date_tooltip = (task.due_at.nil? and !milestone_due_at.nil?) ? "Data limite do milestone" : "Data limite para conclusão da tarefa"
 
     due_at = task.due_at || task.milestone.try(:due_at)
     html_class = ""

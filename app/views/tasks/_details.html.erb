@@ -2,7 +2,7 @@
   <legend><%=_ "Details" %></legend>
 
   <div class="control-group">
-    <label for="task_project_id"><%=_ 'Project' %></label>
+    <label for="task_project_id"><%=_ 'Projeto' %></label>
     <select name="task[project_id]" id="task_project_id" <%= "disabled=\"disabled\"" unless perms['reassign'].empty? %>>
       <%= options_for_user_projects(@task) %>
     </select>
@@ -17,12 +17,12 @@
   </div>
 
   <div class="control-group">
-    <label for="task_duration"><%=_ 'Time Estimate' %></label>
-    <%= text_field 'task', 'duration', :size => 12, :value => (!@task.duration.nil? and @task.duration > 0 ? TimeParser.format_duration(@task.duration) : ""), :rel => 'tooltip', "data-placement" => "right", :title => 'Enter a different value in the format 3h 30m.', :placeholder => TimeParser.format_duration(@task.default_duration) + "(default)" %>
+    <label for="task_duration"><%=_ 'Tempo estimado' %></label>
+    <%= text_field 'task', 'duration', :size => 12, :value => (!@task.duration.nil? and @task.duration > 0 ? TimeParser.format_duration(@task.duration) : ""), :rel => 'tooltip', "data-placement" => "right", :title => 'Digite o valor no formato 3h 30m.', :placeholder => TimeParser.format_duration(@task.default_duration) + "(default)" %>
   </div>
 
   <div class="control-group clearfix">
-    <label for="task[due_at]"> <%=_ 'Target Date' %> </label>
+    <label for="task[due_at]"> <%=_ 'Data limite' %> </label>
     <div id="due_date_field" class="pull-left">
       <%= due_date_field(@task, perms) %>
     </div>
@@ -38,7 +38,7 @@
 
   <% unless @task.resolved? or @task.new_record? %>
     <div class="control-group">
-      <label>Forecast Date</label>
+      <label>Data prevista</label>
       <span style="margin-top:0.6em;float:left;"><%= @task.estimate_date ? @task.estimate_date.strftime(current_user.date_format) : "unknown"  %></span>
     </div>
   <% end %>

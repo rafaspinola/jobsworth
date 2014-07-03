@@ -1,11 +1,19 @@
 class Newsletter
 
-	def self.send_notifications
+	def self.send_not
 		users = get_users_to_notify
 		users.each do |id, u|
 			body = build_email_html_body(u)
 			subject = build_subject(u)
 			NewsletterMailer.newsletter_email(u, subject, body)
+		end
+	end
+
+	def self.send_notifications
+		users = get_users_to_notify
+		users.each do |id, u|
+			Notifications::reminder(u[:tasks_today],
+				u[:tasks_tomorrow], u[:tasks_overdue], u[:user]).deliver
 		end
 	end
 
@@ -61,25 +69,50 @@ class Newsletter
 			t.users.each do |u|
 				if u.active then
 					users_to_notify[u.id] = build_user(u) if users_to_notify[u.id] == nil
-					task_element = build_task(t)
-					users_to_notify[u.id][:tasks_overdue].append(task_element) if t.due_at < Date.today
-					users_to_notify[u.id][:tasks_today].append(task_element) if t.due_at == Date.today
-					users_to_notify[u.id][:tasks_tomorrow].append(task_element) if t.due_at == Date.tomorrow
+					users_to_notify[u.id][:tasks_overdue].append(t) if t.due_at < Date.today
+					users_to_notify[u.id][:tasks_today].append(t) if t.due_at == Date.today
+					users_to_notify[u.id][:tasks_tomorrow].append(t) if t.due_at == Date.tomorrow
 				end
 			end
 		end
 		users_to_notify
 	end
 
+	# def self.get_users_to_notify
+	# 	tsks = TaskRecord.includes(:users).where("due_at <= ? AND completed_at IS NOT NULL", Date.tomorrow)
+	# 	users_to_notify = {}
+	# 	tsks.each do |t|
+	# 		t.users.each do |u|
+	# 			if u.active then
+	# 				users_to_notify[u.id] = build_user(u) if users_to_notify[u.id] == nil
+	# 				task_element = build_task(t)
+	# 				users_to_notify[u.id][:tasks_overdue].append(task_element) if t.due_at < Date.today
+	# 				users_to_notify[u.id][:tasks_today].append(task_element) if t.due_at == Date.today
+	# 				users_to_notify[u.id][:tasks_tomorrow].append(task_element) if t.due_at == Date.tomorrow
+	# 			end
+	# 		end
+	# 	end
+	# 	users_to_notify
+	# end
+
 	def self.build_user(u)
 		{
-			:name => u.name,
-			:email => u.email,
+			:user => u,
 			:tasks_overdue => [],
 			:tasks_today => [],
 			:tasks_tomorrow => []
 		}
 	end
+
+	# def self.build_user(u)
+	# 	{
+	# 		:name => u.name,
+	# 		:email => u.email,
+	# 		:tasks_overdue => [],
+	# 		:tasks_today => [],
+	# 		:tasks_tomorrow => []
+	# 	}
+	# end
 
 	def self.build_task(t)
 		{ :num => t.task_num, :name => t.name, :due_at => t.due_at }

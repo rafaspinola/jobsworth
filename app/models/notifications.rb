@@ -58,7 +58,6 @@ class Notifications < ActionMailer::Base
 
   def reminder(tasks, tasks_tomorrow, tasks_overdue, user, sent_at = Time.now)
     @tasks, @tasks_tomorrow, @tasks_overdue, @user = tasks, tasks_tomorrow, tasks_overdue, user
-
     mail(:subject => "#{$CONFIG[:prefix]} #{_('Tasks due')}",
          :date => sent_at,
          :to => user.email,

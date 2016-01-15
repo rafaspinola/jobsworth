@@ -186,7 +186,7 @@ class WorklogReport
       end
     end
 
-    @work_logs = logs.sort_by { |log| log.started_at }
+    @work_logs = logs.order(:started_at)
   end
 
   ###
@@ -260,6 +260,7 @@ class WorklogReport
   # GENERAL REPORT GENERATION METHODS
 
   def key_from_worklog(w, r)
+    #"#{w.customer.name}_#{w.project.name}_#{w.task.name}_#{w.id}"
     if r == 1
       "#{w.customer.name} #{w.project.name} #{w.task.name} #{w.task.task_num}"
     elsif r == 2
@@ -284,7 +285,7 @@ class WorklogReport
       tz.utc_to_local(w.started_at) + w.duration
     elsif r == 15
       if w.body && !w.body.empty?
-        "#{w.customer.name}_#{w.project.name}_#{w.task.name}_#{w.id}"
+        "#{w.customer.name}_#{w.project.name}_#{w.task.name}_#{tz.utc_to_local(w.started_at).strftime("%Y%m%d%H%M")}"
       else
         "#{w.customer.name}_#{w.project.name}_#{w.task.name}"
       end

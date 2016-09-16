@@ -76,6 +76,7 @@ class CustomersController < ApplicationController
 
   def search
     search_criteria = params[:term].strip
+    puts "ENTROUOUOUO"
 
     @customers = []
     @users = []
@@ -84,29 +85,30 @@ class CustomersController < ApplicationController
     @resources = []
     @limit = 5
     unless search_criteria.blank?
-      if search_criteria.to_i > 0
-        @tasks = TaskRecord.all_accessed_by(current_user).where(:task_num => search_criteria)
-      elsif params[:entity]
+      @tasks = TaskRecord.all_accessed_by(current_user).where(:task_num => search_criteria).to_a if search_criteria.to_i > 0
+      if params[:entity]
         @limit = 100000
-        if params[:entity] =~ /user/
-          @users = current_user.company.users.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
-        elsif params[:entity] =~ /customer/
-          @customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
-        elsif params[:entity] =~ /task/
-          @tasks = TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where("tasks.status = 0")
-        elsif params[:entity] =~ /resource/
-          @resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
+        #if params[:entity] =~ /user/
+        #  @users = current_user.company.users.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
+        #elsif params[:entity] =~ /customer/
+        #  @customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
+        #elsif params[:entity] =~ /task/
+        if params[:entity] =~ /task/
+          @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').to_a
+        #elsif params[:entity] =~ /resource/
+        #  @resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
         elsif params[:entity] =~ /project/
           @projects = current_user.projects.where('lower(name) like ?', '%' + search_criteria.downcase + '%')
         end
       else
-        @customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
-        @users = current_user.company.users.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
-        @tasks = TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where("tasks.status = 0")
-        @resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
+        #@customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
+        #@users = current_user.company.users.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
+        @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where("tasks.status = 0").to_a
+        #@resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
         @projects = current_user.projects.where('lower(name) like ?', '%' + search_criteria.downcase + '%')
       end
     end
+    @tasks = @tasks.flatten unless @tasks == []
 
     html = render_to_string :partial => "customers/search_autocomplete", :locals => {:users => @users, :customers => @customers, :tasks => @tasks, :projects => @projects, :resources => @resources, :limit => @limit }
     render :json=> { :success => true, :html => html }

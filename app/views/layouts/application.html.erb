@@ -1,11 +1,7 @@
 <% content_for :content do %>
   <div class="row-fluid">
-    <div class="span10">
+    <div class="span12">
       <%= yield :layout %>
-    </div>
-    <div class="span2">
-      <%= yield(:side_panel) %>
-      <%= render(:partial => "tasks/nextTasks") %>
     </div>
   </div>
 <% end %>

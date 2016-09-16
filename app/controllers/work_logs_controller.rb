@@ -25,6 +25,8 @@ class WorkLogsController < ApplicationController
   end
 
   def edit
+    @additional_user = User.find(params[:user_id]) unless (params[:user_id] == nil)
+    @work_log_kinds = WorkLogKind.all
   end
 
   def update
@@ -32,6 +34,8 @@ class WorkLogsController < ApplicationController
 
     @log.attributes = params[:work_log]
     @log.project = @task.project
+
+    @log.additional_work_log_user.create(user_id: params[:additional_work_log_user_id]) unless params[:additional_work_log_user_id] == nil
 
     if @log.save
       flash[:success] = _("Log entry saved...")
@@ -62,6 +66,13 @@ class WorkLogsController < ApplicationController
     log.status= params[:work_log][:status]
 
     render :text => log.save.to_s
+  end
+
+  def remove_participation
+    @log = WorkLog.find(params[:id])
+    result = @log.remove_additional_work_log_user(params[:user_id])
+
+    redirect_to tasks_path
   end
 
   private

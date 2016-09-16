@@ -52,8 +52,9 @@ end
 
 group :test, :development do
   gem "machinist",        '1.0.6'
-  gem "debugger"
-  gem 'rb-readline'
+  #gem "ruby-debug-base"
+  #gem 'byebug'
+  #gem 'rb-readline'
 end
 
 group :test do

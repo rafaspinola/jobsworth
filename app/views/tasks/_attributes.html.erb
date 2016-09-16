@@ -1,5 +1,5 @@
 <fieldset id="task_attr">
-  <legend><%=_ "Attributes" %></legend>
+  <legend><%=_ "Tags" %></legend>
   <label for="task_set_tags"><%=_ 'Tags' %></label>
   <%= text_field("task", "set_tags", {
       :size => nil,
@@ -19,19 +19,8 @@
         <% end -%>
       </select>
   <% end -%>
-
-  <div class="control-group">
-    <label for="task_service_id"><%=_ 'Service' %></label>
-    <p style="overflow-x:hidden;">
-      <select name="task[service_id]" id="task_service_id" <%= "disabled=\"disabled\"" unless perms['edit'].empty? %>>
-        <%= options_for_task_services(@task.customers, @task) %>
-      </select>
-      <span id="task_service_tip" class="label label-warning" title="Service Tip" style="cursor:help;">?</span>
-      <br/>
-      <span class="label label-warning">
-        <span id="billable-label">Billable</span>
-      </span>
-    </p>
-  </div>
+  <span class="label label-warning">
+    <span id="billable-label">Billable</span>
+  </span>
 
 </fieldset>

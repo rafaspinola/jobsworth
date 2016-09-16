@@ -39,6 +39,7 @@ Jobsworth::Application.routes.draw do
   end
 
   # task routes
+  get 'tasks/calendar' => "tasks#calendar"
   get 'tasks/:id' => "tasks#edit", :constraints => {:id => /\d+/}
   get "tasks/view/:id" => "tasks#edit", :as => :task_view
   get "tasks/nextTasks/:count" => "tasks#nextTasks", :defaults => { :count => 5 }
@@ -92,6 +93,7 @@ Jobsworth::Application.routes.draw do
 
   resources :work_logs do
     match :update_work_log, :on=> :member
+    get :remove_participation, :on => :member
   end
 
   resources :tags do

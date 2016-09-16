@@ -1,0 +1,16 @@
+<fieldset id="task_details">
+  <legend><%=_ "Contingência" %></legend>
+
+  <div class="control-group">
+    <label for="risk_level_id">Risco</label>
+    <%= select "task", "risk_level_id", RiskLevel.all.collect {|e| [e.description, e.id]}, { include_blank: true } %>
+  </div>
+  <div class="control-group">
+    <label for="risk_level_id">Valor</label>
+	  <%= input "task", "risk_value" %>
+  </div>
+  <div class="control-group">
+    <label for="risk_justification">Justificativa</label>
+    <%= text_area "task", "risk_justification", { :rows => 4, :cols=> nil, :class => "autogrow", :placeholder => "Justificativa do risco" } %>
+  </div>
+</fieldset>

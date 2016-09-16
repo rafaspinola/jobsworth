@@ -33,10 +33,16 @@
     <% if show_timer %>
       <%= render partial: 'save_dropdown' if show_timer %>
     <% else %>
-      <%= button_tag 'Save', id: 'save-btn', class: 'btn' %>
+      <%= button_tag 'Salvar', id: 'save-btn', class: 'btn' %>
     <% end %>
   </div>
+  <!-- PARA INCLUIR O PRAZO
+  <div id="save-deadline" class="pull-left">
+    Prazo:
 
+    Pessoa:
+  </div>
+  -->
   <% if current_user.access_level_id > 1 %>
     <div id="accessLevel_container">
       <%= fields_for :work_log do |f| %>

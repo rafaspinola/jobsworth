@@ -1,8 +1,9 @@
 <%= hidden_field_tag :task_id, @log.task.task_num %>
+<%= hidden_field_tag(:additional_work_log_user_id, @additional_user.id) unless @additional_user == nil %>
 
 <% if current_user.option_tracktime.to_i == 1 %> 
   <div class="control-group">
-    <%= label :started_at, _("Start") %>
+    <%= label :started_at, _("Início") %>
     <div class="controls">
       <% if @log.new_record? %>
         <%= text_field(:work_log, :started_at, :value => Time.now.strftime("#{current_user.date_format} #{current_user.time_format}")) %>
@@ -12,18 +13,25 @@
     </div>
   </div>
 
+  <div class="control-group">
+    <%= label :work_log_kind, _("Tipo") %>
+    <div class="controls">
+      <%= select(:work_log, :kind, @work_log_kinds.map {|e| [e.description, e.id]}, {selected: @log.kind}) %>
+    </div>
+  </div>
+
   <%= render(:partial => "/common/custom_attributes", :locals => { :object => @log }) %>
 
   <% if @log.worktime? %>
     <div class="control-group">
-      <%= label :work_log, :customer_name, _("Client") %>
+      <%= label :work_log, :customer_name, _("Cliente") %>
       <div class="controls">
         <%= select :work_log, :customer_id, work_log_customer_options(@log) %>
       </div>
     </div>
 
     <div class="control-group">
-      <label for="work_log_duration"><%=_ 'Time worked' %></label>
+      <label for="work_log_duration"><%=_ 'Horas trabalhadas' %></label>
       <div class="controls">
         <%= text_field(:work_log, :duration, :value => TimeParser.format_duration(@log.duration),
             :size => 10, :rel => 'tooltip', :title => _('e.g. 3h 4m'), "data-placement" => "right") %>
@@ -34,7 +42,7 @@
 
 <% unless @log.new_record? %>
   <div class="control-group">
-    <label for="work_log_body"><%=_ 'Notes' %></label>
+    <label for="work_log_body"><%=_ 'Notas' %></label>
     <div class="controls">
       <%= text_area(:work_log, :body, :rows => 10, :value => @log.body, :class => "input-xxlarge") %>
     </div>

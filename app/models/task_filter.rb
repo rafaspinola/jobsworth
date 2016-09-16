@@ -314,7 +314,10 @@ private
 
   def simple_conditions_for_customer_qualifiers(customer_qualifiers)
     return if customer_qualifiers.nil?
-    ids = customer_qualifiers.map { |q| q.qualifiable.id }
+    ids = []
+    customer_qualifiers.each do |q|
+      ids << q.qualifiable.id  if q != nil && q.qualifiable != nil
+    end
     ids = ids.join(",")
 
     if !ids.blank?

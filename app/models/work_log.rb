@@ -28,6 +28,7 @@ class WorkLog < ActiveRecord::Base
   has_one    :event_log, :as => :target, :dependent => :destroy
   has_many   :email_deliveries
   has_many   :project_files
+  has_many   :additional_work_log_user
 
   scope :worktimes, where("work_logs.duration > 0")
   scope :comments, where("work_logs.body IS NOT NULL AND work_logs.body <> ''")
@@ -223,6 +224,19 @@ class WorkLog < ActiveRecord::Base
 
   def user=(u)
     self._user_ = u
+  end
+
+  def is_addable?(user)
+    ((self.user_id != user.id) && (self.additional_work_log_user.select {|i| i.user_id == user.id}).empty?)
+  end
+
+  def is_removable?(user)
+    !(self.additional_work_log_user.select {|i| i.user_id == user.id}).empty?
+  end
+
+  def remove_additional_work_log_user(removed_user_id)
+    additionals = AdditionalWorkLogUser.where(work_log_id: self.id, user_id: removed_user_id)
+    additionals.first.destroy unless (additionals == nil || additionals.empty?)
   end
 
 end

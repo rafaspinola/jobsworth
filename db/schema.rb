@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131223181248) do
+ActiveRecord::Schema.define(:version => 20160915034245) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(:version => 20131223181248) do
   add_index "activities", ["company_id"], :name => "fk_activities_company_id"
   add_index "activities", ["customer_id"], :name => "fk_activities_customer_id"
   add_index "activities", ["user_id"], :name => "fk_activities_user_id"
+
+  create_table "additional_work_log_users", :force => true do |t|
+    t.integer  "work_log_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "additional_work_log_users", ["user_id"], :name => "index_additional_work_log_users_on_user_id"
+  add_index "additional_work_log_users", ["work_log_id"], :name => "index_additional_work_log_users_on_work_log_id"
 
   create_table "companies", :force => true do |t|
     t.string   "name",                       :limit => 200, :default => "",   :null => false
@@ -415,6 +425,10 @@ ActiveRecord::Schema.define(:version => 20131223181248) do
   add_index "resources_tasks", ["resource_id"], :name => "index_resources_tasks_on_resource_id"
   add_index "resources_tasks", ["task_id"], :name => "index_resources_tasks_on_task_id"
 
+  create_table "risk_levels", :force => true do |t|
+    t.string "description"
+  end
+
   create_table "scm_changesets", :force => true do |t|
     t.integer  "user_id"
     t.integer  "scm_project_id"
@@ -604,34 +618,37 @@ ActiveRecord::Schema.define(:version => 20131223181248) do
   add_index "task_users", ["user_id"], :name => "index_task_users_on_user_id"
 
   create_table "tasks", :force => true do |t|
-    t.string   "name",              :limit => 200, :default => "",     :null => false
-    t.integer  "project_id",                       :default => 0,      :null => false
-    t.integer  "position",                         :default => 0,      :null => false
-    t.datetime "created_at",                                           :null => false
+    t.string   "name",               :limit => 200, :default => "",     :null => false
+    t.integer  "project_id",                        :default => 0,      :null => false
+    t.integer  "position",                          :default => 0,      :null => false
+    t.datetime "created_at",                                            :null => false
     t.datetime "due_at"
-    t.datetime "updated_at",                                           :null => false
+    t.datetime "updated_at",                                            :null => false
     t.datetime "completed_at"
-    t.integer  "duration",                         :default => 1
-    t.integer  "hidden",                           :default => 0
+    t.integer  "duration",                          :default => 1
+    t.integer  "hidden",                            :default => 0
     t.integer  "milestone_id"
     t.text     "description"
     t.integer  "company_id"
-    t.integer  "priority",                         :default => 0
+    t.integer  "priority",                          :default => 0
     t.integer  "updated_by_id"
-    t.integer  "severity_id",                      :default => 0
-    t.integer  "type_id",                          :default => 0
-    t.integer  "task_num",                         :default => 0
-    t.integer  "status",                           :default => 0
+    t.integer  "severity_id",                       :default => 0
+    t.integer  "type_id",                           :default => 0
+    t.integer  "task_num",                          :default => 0
+    t.integer  "status",                            :default => 0
     t.integer  "creator_id"
     t.datetime "hide_until"
-    t.integer  "worked_minutes",                   :default => 0
-    t.string   "type",                             :default => "Task"
-    t.integer  "weight",                           :default => 0
-    t.integer  "weight_adjustment",                :default => 0
-    t.boolean  "wait_for_customer",                :default => false
+    t.integer  "worked_minutes",                    :default => 0
+    t.string   "type",                              :default => "Task"
+    t.integer  "weight",                            :default => 0
+    t.integer  "weight_adjustment",                 :default => 0
+    t.boolean  "wait_for_customer",                 :default => false
     t.integer  "service_id"
-    t.boolean  "isQuoted",                         :default => false,  :null => false
+    t.boolean  "isQuoted",                          :default => false,  :null => false
     t.datetime "estimate_date"
+    t.integer  "risk_level_id"
+    t.string   "risk_value"
+    t.text     "risk_justification"
   end
 
   add_index "tasks", ["company_id"], :name => "tasks_company_id_index"

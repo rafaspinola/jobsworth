@@ -174,6 +174,10 @@ class ApplicationController < ActionController::Base
     ActionMailer::Base.default_url_options[:host] = with_subdomain(request.subdomain)
   end
 
+  def after_sign_in_path_for(resource)
+    tasks_calendar_path
+  end
+
   protected
 
   def authorize_user_is_admin

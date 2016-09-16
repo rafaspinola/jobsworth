@@ -1,11 +1,14 @@
 <% @page_title = "Work Log - #{$CONFIG[:productName]}" %>
 
 <legend>
-  <%=_ 'Edit Log Entry' %> - <%= @log.task %>
+  <%=_ 'Editar atividade' %> - <%= @log.task %>
 </legend>
 
 <%= form_for(@log, :as => :work_log, :html => {:class => "form-horizontal"}) do |f| -%>
   <fieldset class="basic">
+    <% unless @additional_user == nil %>
+      <h3>Adicionando <%= @additional_user.name %> à atividade</h3>
+    <% end %>
     <%= render :partial => "form" %>
     <div class="form-actions">
       <%= cit_submit_tag(@log) %>

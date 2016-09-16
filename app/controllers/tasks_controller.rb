@@ -636,7 +636,6 @@ class TasksController < ApplicationController
 
   # Fim Relatório antigo
 
-
   protected
 
   def check_if_user_can_create_task

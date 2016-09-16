@@ -30,6 +30,9 @@
   <% end %>
 
   <% unless tasks.size == 0%>
+  <!--
+  <%= tasks.inspect %>
+  -->
     <li class="header"><b>Tasks</b></li>
     <% if tasks.size <= limit %>
       <% tasks.each do |t| %>

@@ -53,6 +53,8 @@ class AbstractTask < ActiveRecord::Base
   has_many      :sheets,  :foreign_key=>'task_id'
   has_one       :ical_entry, :foreign_key=>'task_id'
 
+  has_one       :risk_level
+
   has_and_belongs_to_many :email_addresses, :join_table => 'email_address_tasks', :foreign_key=>'task_id'
 
   validates_length_of     :name,  :maximum=>200, :allow_nil => true

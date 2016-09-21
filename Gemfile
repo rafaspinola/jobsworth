@@ -23,7 +23,8 @@ gem 'jquery-rails', '2.1.3'
 gem 'closure-compiler'
 gem 'delayed_job_active_record'
 gem 'cocaine'
-gem 'capistrano'
+gem 'net-ssh', '2.9.0'
+gem 'capistrano', '2.15.5'
 
 platforms :jruby do
   gem 'activerecord-jdbcmysql-adapter'

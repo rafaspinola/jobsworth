@@ -755,6 +755,10 @@ div#snooze_until {
   font-size: 9px;
 }
 
+div#save-dropdown ul.dropdown-menu {
+  width: 200px;
+}
+
 div#save-dropdown ul.dropdown-menu input#kind, div#worktime-dialog .control-group input#kind {
   margin: 0px 4px 0px 13px;
 }

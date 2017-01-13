@@ -13,8 +13,9 @@ class TasksController < ApplicationController
   def index
     @task   = TaskRecord.accessed_by(current_user).find_by_id(session[:last_task_id])
 
-    session[:jqgrid_sort_column]= params[:sidx] unless params[:sidx].nil?
-    session[:jqgrid_sort_order] = params[:sord] unless params[:sord].nil?
+#    session[:jqgrid_sort_column]= params[:sidx] unless params[:sidx].nil?
+#    session[:jqgrid_sort_order] = params[:sord] unless params[:sord].nil?
+
     @tasks = current_task_filter.tasks_for_jqgrid(params)
 
     @work_log_kinds = WorkLogKind.all
@@ -198,6 +199,8 @@ class TasksController < ApplicationController
       end
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
       flash[:error] = @task.errors.full_messages.join(". ")
+      @work_log_kinds = WorkLogKind.all
+
       respond_to do |format|
         format.html { render :template=> 'tasks/edit' }
         format.js { render :json => {:status => :error, :messages => @task.errors.full_messages}.to_json }

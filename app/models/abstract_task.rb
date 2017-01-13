@@ -63,6 +63,7 @@ class AbstractTask < ActiveRecord::Base
   validates_presence_of   :project_id
   validates_uniqueness_of :task_num, :scope => 'company_id', :on => :update
   validate :validate_properties
+  validate :has_tags_groups
 
   before_create lambda { self.task_num = nil }
   after_create :set_task_num
@@ -77,12 +78,7 @@ class AbstractTask < ActiveRecord::Base
       join users on
         project_permissions.user_id = users.id"
     ).where(
-      "users.id = ? and
-      (
-        project_permissions.can_see_unwatched = ? or
-        users.id in
-          (select task_users.user_id from task_users where task_users.task_id=tasks.id)
-      )",
+      "users.id = ? and project_permissions.can_see_unwatched = ?",
       user.id,
       true
     )
@@ -95,16 +91,18 @@ class AbstractTask < ActiveRecord::Base
       join users as project_permission_users on
         project_permissions.user_id = project_permission_users.id"
     ).where(
-      "project_permission_users.id= ? and
-      (
-        project_permissions.can_see_unwatched = ? or
-        project_permission_users.id in
-          (select task_users.user_id from task_users where task_users.task_id=tasks.id)
-      )",
+      "project_permission_users.id= ? and project_permissions.can_see_unwatched = ?",
       user.id,
       true
     )
   end
+
+      # "project_permission_users.id= ? and
+      # (
+      #   project_permissions.can_see_unwatched = ? or
+      #   project_permission_users.id in
+      #     (select task_users.user_id from task_users where task_users.task_id=tasks.id)
+      # )",
 
   #let children redefine read statuses
   def set_task_read(user, status=true); end
@@ -355,6 +353,24 @@ class AbstractTask < ActiveRecord::Base
         res = false
         errors.add(:base, _("%s is required", p.name))
       end
+    end
+
+    return res
+  end
+
+  def has_tags_groups
+    res = true
+
+    if self.tags.class == Array
+      tag_arr = self.tags.map do |t|
+        t.name
+      end
+    end  
+    tag_arr = self.tags.split(", ") if self.tags.class == String   
+
+    if ((tag_arr.length != 3) || (tag_arr[0] == "administrativo")) && ((tag_arr.length != 1) || (tag_arr[0] != "administrativo"))
+      res = false
+      errors.add(:base, _("Preencha todas as tags da tarefa, ou apenas com administrativo"))
     end
 
     return res

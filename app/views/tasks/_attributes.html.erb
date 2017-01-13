@@ -1,12 +1,29 @@
 <fieldset id="task_attr">
   <legend><%=_ "Tags" %></legend>
-  <label for="task_set_tags"><%=_ 'Tags' %></label>
-  <%= text_field("task", "set_tags", {
-      :size => nil,
-      :value => @task.tagstring,
-      :autocomplete => "off" }.merge( perms['edit'])) %>
-  <br />
+  <%= hidden_field("task", "set_tags", {
+      :value => @task.tagstring }) %>
 
+  <%
+    selected_tag_1 = 0
+    selected_tag_2 = 0
+    selected_tag_3 = 0
+    @task.tags.each do |t|
+      case t.kind
+      when 1
+        selected_tag_1 = t.name
+      when 2
+        selected_tag_2 = t.name
+      when 3
+        selected_tag_3 = t.name
+      end
+    end
+  %>
+
+  <%= select_tag "tipo1", options_from_collection_for_select(Tag.where(kind: 1), :name, :name, selected_tag_1), include_blank: true %>
+
+  <%= select_tag "tipo2", options_from_collection_for_select(Tag.where(kind: 2), :name, :name, selected_tag_2), include_blank: true %>
+
+  <%= select_tag "tipo3", options_from_collection_for_select(Tag.where(kind: 3), :name, :name, selected_tag_3), include_blank: true %>
 
   <% current_user.company.properties.each do |p|
        selected = @task.new_record? ? p.default_value : @task.property_value(p)

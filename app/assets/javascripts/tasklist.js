@@ -8,7 +8,7 @@ var columnModel;
 /*
   Sends an ajax request to save the given user preference to the db
 */
-function saveUserPreference(name, value) {
+/*function saveUserPreference(name, value) {
   var params = { "name": name, "value": value };
   jQuery.post("/users/set_preference",  params);
 }
@@ -61,7 +61,7 @@ function change_group() {
     });
   }
 }
-
+*/
 
 /* Since the json call is asynchronous
   it is important that this function then calls
@@ -69,38 +69,128 @@ function change_group() {
   but only after it has returned successfully
 */
 jQuery(document).ready(function() {
-  if (jQuery('#task_list').length) {
-    jQuery.ajax({
-      async: false,
-      url: '/users/get_tasklistcols',
-      dataType: 'json',
-      success:function(response) {
-        columnModel = response;
-        initTaskList();
-      },
-      error:function (xhr, thrownError) {
-        alert("Invalid task list model returned from server");
-      }
-    });
-  }
+  jQuery('div.task_filters>ul>li>a').click(loadFilterPanel);
+  jQuery('#tags .panel_content a').click(loadFilterPanel);
+  loadTasksNewList();
+  
 
   //override the standard reloadGrid event handler
   //save jggrid scroll position before call reloadGrid event
-  var grid = jQuery("#task_list");
-  var events = grid.data("events"); // read all events bound to
-  var originalReloadGrid; // here we will save the original event handle
-  // Verify that one reloadGrid event handler is set.
-  if (events && events.reloadGrid && events.reloadGrid.length === 1) {
-    originalReloadGrid = events.reloadGrid[0].handler; // save old event
-    grid.unbind('reloadGrid');
-    grid.bind('reloadGrid', function(e,opts) {
-      savejqGridScrollPosition();
-      originalReloadGrid(e,opts);
-      restorejqGridScrollPosition();
-    });
-  }
 });
 
+function loadTasksNewList(order) {
+  if ((order == "") || (order == undefined)) {
+    order = "client";
+  }
+  jQuery('#task_list_result').html("Carregando resultados... ");
+  showLoadingAnimationFor(jQuery('#task_list_result'));
+  jQuery.ajax({
+    async: true,
+    url: '/tasks?format=json&order=' + order,
+    dataType: 'json',
+    success:function(response) {
+      renderHeader(response.tasks.records, order);
+      renderItems(response.tasks.rows, response.tasks.records, order);
+    },
+    error:function (xhr, thrownError) {
+      alert("Não foi possível recuperar a lista de tarefas");
+    }
+  });
+}
+
+function buildItem(rec) {
+  return '<br /><a href="javascript:loadTask('+ rec.id +');">'+ rec.summary + '</a> (#' + rec.id + ') - Movimentada há ' + rec.updated_at;
+}
+
+function renderClient(clientName, items) {
+  jQuery('#task_list_result').append("<p>Cliente: " + clientName + items + "</p>");
+}
+
+function renderHeader(resultAmount, currentOrder) {
+  jQuery('#task_list_result').html("<p>" + resultAmount + " tarefas encontradas ordenadas por " + 
+    decodeOrder(currentOrder) + ". Ordenar por " + otherSortOptions(currentOrder) + "</p>");
+}
+
+function renderItems(rows, resultAmount, order) {
+  if (order == "client") {
+    renderItemsByClient(rows, resultAmount);
+  } else {
+    renderItemsByDefaultOrder(rows, resultAmount);
+  }
+}
+
+function renderItemsByClient(rows, resultAmount) {
+  if (resultAmount > 0) {
+    var clientName = "fhjdlakshf";
+    var items = "";
+    for (var i = 0; i < resultAmount; i++) {
+      var rec = rows[i];
+      if ((clientName != "fhjdlakshf") && (clientName != rec.client)) {
+        renderClient(clientName, items);
+        items = "";
+      }
+      items = items + buildItem(rec);
+      clientName = rec.client;
+    }
+    renderClient(clientName, items);
+  }
+}
+
+function renderItemsByDefaultOrder(rows, resultAmount) {
+  for (var i = 0; i < resultAmount; i++) {
+    var rec = rows[i];
+    jQuery('#task_list_result').append(buildItem(rec));
+  }
+}
+
+function decodeOrder(order) {
+  switch(order) {
+      case 'updated_at':
+        return "última movimentação";
+      case 'summary':
+        return "nome";
+      case 'id':
+        return "número";
+      case 'client':
+        return "cliente";
+      default:
+        return "cliente";
+    }
+}
+
+function otherSortOptions(currentOrder)
+{
+  var text = "";
+  var first = true;
+  if (currentOrder != 'updated_at') {
+    text = text + buildSortOption("data de movimentação", 'updated_at', first);
+    first = false;
+  }
+  if (currentOrder != 'summary') {
+    text = text + buildSortOption("nome da atividade", 'summary', first);
+    first = false;
+  }
+  if (currentOrder != 'id') {
+    text = text + buildSortOption("número da tarefa", 'id', first);
+    first = false;
+  }
+  if (currentOrder != 'client') {
+    text = text + buildSortOption("nome do cliente", 'client', first);
+    first = false;
+  }
+  return text
+}
+
+function buildSortOption(text, link_to, first) {
+  var ret = "";
+  if (first == false) {
+    ret = ",";
+  }
+  ret = ret + ' <a href="javascript:loadTasksNewList(\'' + link_to + '\')">' + text + '</a>';
+  return ret;
+}
+
+/*
 function initTaskList() {
   jQuery('#task_list').jqGrid({
         url : '/tasks?format=json',
@@ -131,7 +221,6 @@ function initTaskList() {
         emptyrecords: 'No tasks found.',
         pgbuttons:false,
         pginput:false,
-        rowNum:200,
         recordtext: '{2} tasks found.',
 
         footerrow: true,
@@ -248,13 +337,15 @@ function timeTaskValue(cellvalue) {
         }
         return Math.round(cellvalue/6)/10 + "hr";
 }
-
+*/
 function tasksViewReload()
 {
-    jQuery("#task_list").trigger("reloadGrid");
+    console.log('cheguei');
+
+    loadTasksNewList();
     jQuery('#calendar').fullCalendar('refetchEvents');
 }
-
+/*
 function ajax_update_task_callback() {
   jQuery('#taskform').bind("ajax:success", function(event, json, xhr) {
     authorize_ajax_form_callback(json);
@@ -329,3 +420,4 @@ function restorejqGridScrollPosition() {
 function savejqGridScrollPosition() {
   setLocalStorage("jqgrid_scroll_position", jQuery('div.ui-jqgrid-bdiv').scrollTop());
 }
+*/

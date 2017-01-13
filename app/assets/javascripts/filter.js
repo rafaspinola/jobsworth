@@ -3,7 +3,8 @@ Submits the search filter form. If we are looking at the task list,
 does that via ajax. Otherwise does a normal html post
 */
 function submitSearchFilterForm() {
-    jQuery("#search_filter_form").trigger('submit');
+  loadTasksNewList();
+  jQuery("#search_filter_form").trigger('submit');
 }
 
 /*
@@ -82,22 +83,24 @@ function addTaskFilter(sender, id, field_name) {
   On all other pages, when user click on filter link change filter
 */
 function initFiltersPanel() {
+  console.log('initFiltersPanel');
   jQuery('div.task_filters>ul>li>a').click(loadFilterPanel);
 }
 
 function initTagsPanel() {
+  console.log('initTagsPanel');
   jQuery('#tags .panel_content a').click(loadFilterPanel);
 }
 
 function loadFilterPanel() {
-    return loadFilter('', this.href);
+  return loadFilter('', this.href);
 }
 
 function loadFilter(data, url){
+  console.log('morno');
   jQuery.ajax({
     beforeSend: function(){ showProgress(); },
     complete: function(request){
-      tasksViewReload();
       hideProgress();
     },
     data: data,
@@ -111,12 +114,15 @@ function loadFilter(data, url){
 }
 
 jQuery(document).ready(function() {
+  jQuery('div.task_filters>ul>li>a').click(loadTasksNewList);
+  jQuery('#tags .panel_content a').click(loadTasksNewList);
+
   //only if we on tasks list or calendar or gantt page
   jQuery("#search_filter_form").submit(function(event){
-    return loadFilter(jQuery.param(jQuery(this).serializeArray()), "/task_filters/update_current_filter");
+    var ret = loadFilter(jQuery.param(jQuery(this).serializeArray()), "/task_filters/update_current_filter");
+    loadTasksNewList();
+    return ret;
   });
-  initFiltersPanel();
-  initTagsPanel();
 
   // make search box contents selected when the user clicks in it
   jQuery("#search_filter").focus( function() {

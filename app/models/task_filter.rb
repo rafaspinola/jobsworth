@@ -41,12 +41,12 @@ class TaskFilter < ActiveRecord::Base
   # If limit is false, no limit will be set on the tasks returned (otherwise
   # a default limit will be applied)
   def tasks(extra_conditions = nil)
-    return TaskRecord.all_accessed_by(user).where(conditions(extra_conditions)).includes(to_include).limit(500)
+    return TaskRecord.all_accessed_by(user).where(conditions(extra_conditions)).includes(to_include)#.limit(500)
   end
 
   # Returns an array of all tasks matching the conditions from this filter.
   def tasks_for_jqgrid(parameters)
-    parameters= parse_jqgrid_params(parameters)
+    parameters = parse_jqgrid_params(parameters)
     tasks(parameters[:conditions]).includes(parameters[:include]).joins(parameters[:joins]).order(parameters[:order]).limit(parameters[:limit]).offset(parameters[:offset])
   end
 
@@ -180,7 +180,7 @@ private
     types=["Project", "Milestone", "Status", "Client", "User"]
     types.each do |type|
       qualifiers.select{ |q| q.qualifiable_type == type }.each do |qualifier|
-        arr<< (qualifier.reversed? ? 'not ' : '') + qualifier.qualifiable.to_s
+        arr<< (qualifier.reversed? ? 'not ' : '') + (type == "Project" ? qualifier.qualifiable.full_name : qualifier.qualifiable.to_s)
       end
     end
     keywords.each do |kw|
@@ -409,19 +409,19 @@ private
   # TODO: Store all logic in sql view or create client side sorting.
   def parse_jqgrid_params(jqgrid_params)
     tasks_params={ }
-    if !jqgrid_params[:rows].blank? and !jqgrid_params[:page].blank?
-      tasks_params[:limit]=jqgrid_params[:rows].to_i > 0 ? jqgrid_params[:rows].to_i : 0
-      tasks_params[:offset]=jqgrid_params[:page].to_i-1
-      if tasks_params[:offset] >0
-        tasks_params[:offset] *= tasks_params[:limit]
-      else
-        tasks_params[:offset]=nil
-      end
-    end
-    case jqgrid_params[:sidx]
+    # if !jqgrid_params[:rows].blank? and !jqgrid_params[:page].blank?
+    #   tasks_params[:limit]=jqgrid_params[:rows].to_i > 0 ? jqgrid_params[:rows].to_i : 0
+    #   tasks_params[:offset]=jqgrid_params[:page].to_i-1
+    #   if tasks_params[:offset] >0
+    #     tasks_params[:offset] *= tasks_params[:limit]
+    #   else
+    #     tasks_params[:offset]=nil
+    #   end
+    # end
+    case jqgrid_params[:order]
       when 'updated_at'
         tasks_params[:joins]= "LEFT OUTER JOIN (SELECT task_id, MAX(started_at) AS started_at FROM work_logs WHERE company_id = #{self.company_id} GROUP BY task_id) last_comment_work_logs ON tasks.id = last_comment_work_logs.task_id"
-        tasks_params[:order]='last_comment_work_logs.started_at'
+        tasks_params[:order]='last_comment_work_logs.started_at DESC'
       when 'summary'
         tasks_params[:order]='tasks.name'
       when 'id'

@@ -8,7 +8,7 @@
     "id":<%= task.task_num.to_json.html_safe %>,
     "summary":<%= h(task.name).to_json.html_safe %>,
     "client":<%= h(customer.name).to_json.html_safe %>,
-    "due":<%= due_in_words(task).to_json.html_safe %>,
+    "due":<%= (task.due_at.nil? ? "" : task.due_at.utc.strftime(current_user.date_format)).to_json.html_safe %>,
     "time":<%= task.minutes_left.to_i.to_json.html_safe rescue "\"\"".html_safe %>,
     "updated_at":<%= last_comment_date(task).to_json.html_safe %>
   }

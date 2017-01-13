@@ -99,7 +99,12 @@ function loadTasksNewList(order) {
 }
 
 function buildItem(rec) {
-  return '<br /><a href="javascript:loadTask('+ rec.id +');">'+ rec.summary + '</a> (#' + rec.id + ') - Movimentada há ' + rec.updated_at;
+  var text = '<br /><a href="javascript:loadTask('+ rec.id +');">'+ rec.summary + 
+  '</a> (#' + rec.id + ') - Movimentada há ' + rec.updated_at;
+  if (rec.due != '') {
+    text = text + ' - Prazo: ' + rec.due;
+  } 
+  return text;
 }
 
 function renderClient(clientName, items) {
@@ -153,6 +158,8 @@ function decodeOrder(order) {
         return "número";
       case 'client':
         return "cliente";
+      case 'due':
+        return 'prazo';
       default:
         return "cliente";
     }
@@ -176,6 +183,10 @@ function otherSortOptions(currentOrder)
   }
   if (currentOrder != 'client') {
     text = text + buildSortOption("nome do cliente", 'client', first);
+    first = false;
+  }
+  if (currentOrder != 'due') {
+    text = text + buildSortOption("prazo", 'due', first);
     first = false;
   }
   return text

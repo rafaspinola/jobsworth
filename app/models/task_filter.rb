@@ -427,7 +427,7 @@ private
       when 'id'
         tasks_params[:order]='tasks.id'
       when 'due'
-        tasks_params[:order]='(case isnull(tasks.due_at)  when 1 then milestones.due_at when 0  then tasks.due_at end)'
+        tasks_params[:order]='(case isnull(tasks.due_at)  when 1 then milestones.due_at when 0  then tasks.due_at end) desc'
         tasks_params[:include]=[:milestone]
       when 'assigned'
         tasks_params[:order]='(select  group_concat(distinct users.name)  from  task_users  left outer join users on users.id = task_users.user_id where task_users.task_id=tasks.id  group by tasks.id)'

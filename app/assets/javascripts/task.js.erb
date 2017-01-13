@@ -9,6 +9,7 @@ function loadTask(id) {
     jQuery("#task").fadeIn('slow');
     document.title = "Task " + data.task_num + ":" + data.task_name;
     jQuery("#task [rel=tooltip]").tooltip();
+    jQuery("#task").show();
   }, "html");
 }
 

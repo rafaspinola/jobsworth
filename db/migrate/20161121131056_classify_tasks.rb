@@ -12,7 +12,9 @@ class ClassifyTasks < ActiveRecord::Migration
     change_class(446992, 3)
     change_class(447050, 3)
 
-    Tag.create(company_id: 39892, name: 'Legalizacao', kind: 3)
+    Tag.create(company_id: 39892, name: 'Registral', kind: 3)
+    Tag.create(company_id: 39892, name: 'Administrativo', kind: 3)
+    Tag.create(company_id: 39892, name: 'Urbanistico', kind: 3)
   end
 
   def down
@@ -28,7 +30,9 @@ class ClassifyTasks < ActiveRecord::Migration
     change_class(446992, nil)
     change_class(447050, nil)
 
-    Tag.where("name like 'Legaliza%o'").first.destroy
+    Tag.where("name = 'Registral'").first.destroy
+    Tag.where("name = 'Administrativo'").first.destroy
+    Tag.where("name = 'Urbanistico'").first.destroy
   end
 
   def change_class(id, kind)

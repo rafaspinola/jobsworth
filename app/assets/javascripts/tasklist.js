@@ -351,8 +351,6 @@ function timeTaskValue(cellvalue) {
 */
 function tasksViewReload()
 {
-    console.log('cheguei');
-
     loadTasksNewList();
     jQuery('#calendar').fullCalendar('refetchEvents');
 }

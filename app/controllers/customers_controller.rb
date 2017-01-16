@@ -84,9 +84,7 @@ class CustomersController < ApplicationController
     @resources = []
     @limit = 5
     unless search_criteria.blank?
-    debugger
-
-      @tasks = TaskRecord.all_accessed_by(current_user).where(:task_num => search_criteria, :status => 1).to_a if search_criteria.to_i > 0
+      @tasks = TaskRecord.all_accessed_by(current_user).where(:task_num => search_criteria, :status => 0).to_a if search_criteria.to_i > 0
       if params[:entity]
         @limit = 100000
         #if params[:entity] =~ /user/
@@ -104,9 +102,7 @@ class CustomersController < ApplicationController
       else
         #@customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
         #@users = current_user.company.users.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
-    debugger
-
-        @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where(:status => 1).to_a
+        @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where(:status => 0).to_a
         #@resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
         @projects = current_user.projects.where('lower(name) like ?', '%' + search_criteria.downcase + '%')
       end

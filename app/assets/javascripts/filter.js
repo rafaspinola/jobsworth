@@ -83,12 +83,10 @@ function addTaskFilter(sender, id, field_name) {
   On all other pages, when user click on filter link change filter
 */
 function initFiltersPanel() {
-  console.log('initFiltersPanel');
   jQuery('div.task_filters>ul>li>a').click(loadFilterPanel);
 }
 
 function initTagsPanel() {
-  console.log('initTagsPanel');
   jQuery('#tags .panel_content a').click(loadFilterPanel);
 }
 
@@ -97,7 +95,6 @@ function loadFilterPanel() {
 }
 
 function loadFilter(data, url){
-  console.log('morno');
   jQuery.ajax({
     beforeSend: function(){ showProgress(); },
     complete: function(request){

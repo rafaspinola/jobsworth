@@ -160,6 +160,7 @@ class TasksController < ApplicationController
 
   def update
     @task = AbstractTask.accessed_by(current_user).find_by_id(params[:id])
+
     if @task.nil?
       flash[:error] = _("You don't have access to that task, or it doesn't exist.")
       redirect_from_last and return

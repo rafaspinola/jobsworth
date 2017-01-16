@@ -1,13 +1,16 @@
 <%# encoding: utf-8 %>
 
 function loadTask(id) {
-  if (window.taskTimer) window.taskTimer.destroy();
+  if (window.taskTimer) {
+    window.taskTimer.destroy();
+  }
+  jQuery("#task").empty();
 
-  jQuery.getJSON("/tasks/edit/" + id, function(data) {
-    jQuery("#task").html(data.html);
+  jQuery.getJSON("/tasks/edit/" + id).done(function(data) {
     document.title = "Task " + data.task_num + ":" + data.task_name;
     jQuery("#task [rel=tooltip]").tooltip();
-    jQuery("#task").show();
-  }, "html");
+    jQuery("div#task").append(data.html);
+    jQuery("div#task").show();
+  });
 }
 

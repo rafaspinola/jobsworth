@@ -368,7 +368,7 @@ class AbstractTask < ActiveRecord::Base
     end  
     tag_arr = self.tags.split(", ") if self.tags.class == String   
 
-    if ((tag_arr.length != 3) || (tag_arr[0] == "administrativo")) && ((tag_arr.length != 1) || (tag_arr[0] != "administrativo"))
+    if ((tag_arr.length != 3) || (tag_arr[0] == "Administrativo")) && ((tag_arr.length != 1) || (tag_arr[0] != "Administrativo"))
       res = false
       errors.add(:base, _("Preencha todas as tags da tarefa, ou apenas com administrativo"))
     end

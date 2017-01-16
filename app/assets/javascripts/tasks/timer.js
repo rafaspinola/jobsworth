@@ -58,14 +58,14 @@ jobsworth.tasks.TaskTimer = (function(){
       // drop-down elements behaviour
       $li_elapsed.click(function() {
           // Verificando se há categoria marcada
-          if ($('#kind:checked').length == 1) {
+          if (jQuery('#kind:checked').length == 1) {
               var minutes = Math.floor(self.total_milliseconds / 60000 ) % 60;
               var hours = Math.floor(self.total_milliseconds / 3600000);
 
-              $('#taskform input[name="work_log[duration]"]').val(hours + 'h' + minutes + 'm');
+              jQuery('#taskform input[name="work_log[duration]"]').val(hours + 'h' + minutes + 'm');
               $form.submit();
           } else {
-              alert('Escolha uma categoria');
+              workLogKindCheckError();
           }
       });
 
@@ -96,16 +96,16 @@ jobsworth.tasks.TaskTimer = (function(){
 
       $("button.save", $dialog).click(function(e) {
         // Verificando se há categoria marcada
-        if ($('#kind:checked').length == 1) {
-          $('input[name^="work_log"]', $form).remove();
+        if (jQuery('#kind:checked').length == 1) {
+          jQuery('input[name^="work_log"]', $form).remove();
           $dialog.modal('hide');
           $dialog.addClass("none").appendTo($form);
           $form.submit();
           return false;
         } else {
-          alert('Escolha uma categoria');
+          workLogKindCheckError();
         }
-      })
+      });
   }
 
   function pulse() {
@@ -148,6 +148,15 @@ jobsworth.tasks.TaskTimer = (function(){
       this.$minutes.text('0');
       this.$hours.text('0');
 
+  }
+
+  function workLogKindCheckError() {
+    if (jQuery('#kind:checked').length == 0) {
+      alert('Escolha uma categoria');
+    }
+    else {
+      alert('Escolha apenas uma categoria');
+    }
   }
 
   function TaskTimer() {

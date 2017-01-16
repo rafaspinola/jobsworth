@@ -354,7 +354,7 @@ function tasksViewReload()
     loadTasksNewList();
     jQuery('#calendar').fullCalendar('refetchEvents');
 }
-/*
+
 function ajax_update_task_callback() {
   jQuery('#taskform').bind("ajax:success", function(event, json, xhr) {
     authorize_ajax_form_callback(json);
@@ -386,7 +386,7 @@ function ajax_update_task_callback() {
     alert('error: ' + error);
   });
 }
-
+/*
 function restoreCollapsedState() {
   if (typeof(localStorage) != 'undefined' && getCurrentGroup() != 'clear') {
     for (var i = 0; i < localStorage.length; i++){

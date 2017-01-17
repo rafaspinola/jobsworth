@@ -112,11 +112,12 @@ function renderClient(clientName, items) {
 }
 
 function renderHeader(resultAmount, currentOrder) {
-  jQuery('#task_list_result').html("<p>" + resultAmount + " tarefas encontradas ordenadas por " + 
+  jQuery('#task_list_options').html("<p>" + resultAmount + " tarefas encontradas ordenadas por " + 
     decodeOrder(currentOrder) + ". Ordenar por " + otherSortOptions(currentOrder) + "</p>");
 }
 
 function renderItems(rows, resultAmount, order) {
+  jQuery('#task_list_result').empty();
   if (order == "client") {
     renderItemsByClient(rows, resultAmount);
   } else {

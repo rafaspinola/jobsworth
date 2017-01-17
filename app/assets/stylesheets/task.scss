@@ -8,6 +8,12 @@
   font-size: 11px;
 }
 
+#task_list_result {
+  overflow-y: scroll;
+  height: 250px;
+}
+
+
 #taskform .watcher {
   padding-bottom: 3px;
   padding-top: 2px;

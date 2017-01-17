@@ -36,6 +36,9 @@
 
 <script type="text/javascript">
   jQuery(function() {
+    jQuery('#tipo1').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
+    jQuery('#tipo2').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
+    jQuery('#tipo3').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
     var el = jQuery("form#taskform")[0];
     <% if @task.new_record? %>
       var taskEditor = new jobsworth.tasks.TaskEditor({el: el});

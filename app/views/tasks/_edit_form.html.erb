@@ -11,9 +11,6 @@
 <% if show_timer %>
 <script type="text/javascript">
   jQuery(document).ready(function() {
-    jQuery('#tipo1').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
-    jQuery('#tipo2').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
-    jQuery('#tipo3').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
     window.taskTimer = new jobsworth.tasks.TaskTimer();
   })
 </script>

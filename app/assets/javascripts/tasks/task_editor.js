@@ -1,12 +1,6 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-jQuery(document).ready(function() {
-  jQuery('#tipo1').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
-  jQuery('#tipo2').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
-  jQuery('#tipo3').change(function() {jQuery('#task_set_tags').val(jQuery('#tipo1').val() + ', ' + jQuery('#tipo2').val() + ', ' + jQuery('#tipo3').val());});
-});
-
 var jobsworth = jobsworth || {}
 jobsworth.tasks = jobsworth.tasks || {}
 

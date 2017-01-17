@@ -93,7 +93,7 @@ class CustomersController < ApplicationController
         #  @customers = current_user.company.customers.where('lower(name) LIKE ?', '%' + search_criteria.downcase + '%').where(:active => true)
         #elsif params[:entity] =~ /task/
         if params[:entity] =~ /task/
-          @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').to_a
+          @tasks << TaskRecord.all_accessed_by(current_user).where('lower(tasks.name) LIKE ?', '%' + search_criteria.downcase + '%').where(:status => 0).to_a
         #elsif params[:entity] =~ /resource/
         #  @resources = current_user.company.resources.where('lower(name) like ?', '%' + search_criteria.downcase + '%') if current_user.use_resources?
         elsif params[:entity] =~ /project/

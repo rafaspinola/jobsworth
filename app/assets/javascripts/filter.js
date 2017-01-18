@@ -3,7 +3,6 @@ Submits the search filter form. If we are looking at the task list,
 does that via ajax. Otherwise does a normal html post
 */
 function submitSearchFilterForm() {
-  loadTasksNewList();
   jQuery("#search_filter_form").trigger('submit');
 }
 
@@ -40,8 +39,8 @@ function addSearchFilter(event, ui) {
     */
     var typeName = selected.type;
     var typeValue = selected.typeval;
-    var columnName = selected.col;
-    var columnValue = selected.colval;
+    //var columnName = selected.col;
+    //var columnValue = selected.colval;
     var reversedName = selected.reversed;
     var reversedVal = selected.reversedval;
     if (idName && idName.length > 0) {
@@ -50,9 +49,9 @@ function addSearchFilter(event, ui) {
         if (typeName && typeName.length>0){
             filterKeys.append('<input type="hidden" name="'+typeName+'" value="'+typeValue+'"/>');
         }
-        if (columnName && columnName.length>0) {
-            filterKeys.append('<input type="hidden" name="'+columnName+'" value="'+columnValue+'"/>');
-        }
+        // if (columnName && columnName.length>0) {
+        //     filterKeys.append('<input type="hidden" name="'+columnName+'" value="'+columnValue+'"/>');
+        // }
         if (reversedName && reversedName.length > 0) {
             filterKeys.append('<input type="hidden" name="'+reversedName+'" value="'+reversedVal+'"/>');
         }
@@ -126,7 +125,7 @@ jQuery(document).ready(function() {
     jQuery(this).select();
   });
 
-  jQuery('#search_filter').catcomplete({
+  jQuery('#search_filter').autocomplete({
     source: '/task_filters/search',
     select: addSearchFilter,
     delay: 800,

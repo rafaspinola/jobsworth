@@ -10,7 +10,12 @@
 
 #task_list_result {
   overflow-y: scroll;
-  height: 250px;
+}
+
+#task_pager {
+  margin: 5px 10px;
+  border: 1px solid #999999;
+  text-align: center;
 }
 
 

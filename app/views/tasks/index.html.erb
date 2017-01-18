@@ -20,7 +20,7 @@
 
 	<div id="task_list_options"></div>
 	<div id="task_list_result"><p>Carregando tarefas...</p></div>
-	<div id="task_pager"></div>
+	<div id="task_pager" style="display: none;"><a href="javascript:showAllFoundTasks()"><%= image_tag 'task_down.png', alt: 'Exibir todas as tarefas' %>Exibir todas as tarefas</a></div>
 	<div id="task">
 	  <%= render_last_task.html_safe if @task %>
 	</div>

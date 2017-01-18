@@ -82,8 +82,9 @@ function loadTasksNewList(order) {
   if ((order == "") || (order == undefined)) {
     order = "client";
   }
-  jQuery('#task_list_result').html("Carregando resultados... ");
-  showLoadingAnimationFor(jQuery('#task_list_result'));
+  jQuery('#task_list_options').empty();
+  jQuery('#task_pager').hide();
+  displayLoading('#task_list_result');
   jQuery.ajax({
     async: true,
     url: '/tasks?format=json&order=' + order,
@@ -91,11 +92,24 @@ function loadTasksNewList(order) {
     success:function(response) {
       renderHeader(response.tasks.records, order);
       renderItems(response.tasks.rows, response.tasks.records, order);
+      checkResultHeight();
     },
     error:function (xhr, thrownError) {
       alert("Não foi possível recuperar a lista de tarefas");
     }
   });
+}
+
+function checkResultHeight() {
+  if (parseInt(jQuery('#task_list_result').css('height')) > 200 ) {
+    jQuery('#task_list_result').css('height', '200px');
+    jQuery('#task_pager').show();
+  }
+}
+
+function displayLoading(entity) {
+  jQuery(entity).html("Carregando resultados... ");
+  showLoadingAnimationFor(jQuery(entity));
 }
 
 function buildItem(rec) {
@@ -200,6 +214,11 @@ function buildSortOption(text, link_to, first) {
   }
   ret = ret + ' <a href="javascript:loadTasksNewList(\'' + link_to + '\')">' + text + '</a>';
   return ret;
+}
+
+function showAllFoundTasks() {
+  jQuery('#task_list_result').css('height', 'auto');
+  jQuery('#task_pager').hide();
 }
 
 /*

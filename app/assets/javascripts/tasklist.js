@@ -113,21 +113,24 @@ function displayLoading(entity) {
 }
 
 function buildItem(rec) {
-  var text = '<br /><a href="javascript:loadTask('+ rec.id +');">'+ rec.summary + 
-  '</a> (#' + rec.id + ') - Movimentada há ' + rec.updated_at;
+  var text = '<tr><td><a href="javascript:loadTask('+ rec.id +');">'+ rec.summary + 
+  '</a></td><td>' + rec.id + '</td><td>' + rec.updated_at + '</td><td>';
   if (rec.due != '') {
-    text = text + ' - Prazo: ' + rec.due;
-  } 
+    text = text + rec.due;
+  } else {
+    text = text + '&nbsp;';
+  }
+  text = text + '</td></tr>';
   return text;
 }
 
 function renderClient(clientName, items) {
-  jQuery('#task_list_result').append("<p>Cliente: " + clientName + items + "</p>");
+  return '<tr><td colspan="4" class="client">Cliente: ' + clientName + items + "</td></tr>";
 }
 
 function renderHeader(resultAmount, currentOrder) {
   jQuery('#task_list_options').html("<p>" + resultAmount + " tarefas encontradas ordenadas por " + 
-    decodeOrder(currentOrder) + ". Ordenar por " + otherSortOptions(currentOrder) + "</p>");
+    decodeOrder(currentOrder) + ". Ordenar por " + otherSortOptions(currentOrder) + '</p>');
 }
 
 function renderItems(rows, resultAmount, order) {
@@ -140,27 +143,41 @@ function renderItems(rows, resultAmount, order) {
 }
 
 function renderItemsByClient(rows, resultAmount) {
+  var text = buildTableHeader();
   if (resultAmount > 0) {
     var clientName = "fhjdlakshf";
     var items = "";
     for (var i = 0; i < resultAmount; i++) {
       var rec = rows[i];
       if ((clientName != "fhjdlakshf") && (clientName != rec.client)) {
-        renderClient(clientName, items);
+        text = text + renderClient(clientName, items);
         items = "";
       }
       items = items + buildItem(rec);
       clientName = rec.client;
     }
-    renderClient(clientName, items);
+    text = text + renderClient(clientName, items);
   }
+  jQuery('#task_list_result').append(text + '</table>');  
+}
+
+function buildTableHeader() {
+  return '<table class="tasklist_table"><tr><th>Nome</th><th>Tarefa</th><th>Movimentada há</th><th>Prazo</th></tr>';
 }
 
 function renderItemsByDefaultOrder(rows, resultAmount) {
+  var text = buildTableHeader();
   for (var i = 0; i < resultAmount; i++) {
     var rec = rows[i];
-    jQuery('#task_list_result').append(buildItem(rec));
+    text = text + buildItem(rec);
   }
+  jQuery('#task_list_result').append(text + '</table>');
+  // jQuery('#task_list_result').append('<table class="tasklist_table"><tr><th>Nome</th><th>Tarefa</th><th></tr>');
+  // for (var i = 0; i < resultAmount; i++) {
+  //   var rec = rows[i];
+  //   jQuery('#task_list_result').append(buildItem(rec));
+  // }
+  // jQuery('#task_list_result').append('</table>');
 }
 
 function decodeOrder(order) {

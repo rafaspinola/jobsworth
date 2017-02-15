@@ -12,9 +12,26 @@
   overflow-y: scroll;
 }
 
-#task_pager {
-  margin: 5px 10px;
+table.tasklist_table {
   border: 1px solid #999999;
+  width: 100%;
+  tr {
+    margin: 0px;
+  }
+  td, th {
+    margin: 0px;
+    padding: 3px 5px;
+    border: 1px solid #999999;
+  }
+  td.client {
+    background-color: #DDDDDD;
+    font-weight: bold;
+  }
+}
+
+#task_pager {
+  // margin: 5px 10px;
+  // border: 1px solid #999999;
   text-align: center;
 }
 

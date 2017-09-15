@@ -146,6 +146,7 @@ class TasksController < ApplicationController
     end
 
     set_last_task(@task)
+    # TODO: detectar se a edição vem de um update de work log, porque lá já marca com não lido
     @task.set_task_read(current_user)
     @work_log_kinds = WorkLogKind.all
 

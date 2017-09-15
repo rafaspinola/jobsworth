@@ -67,7 +67,6 @@ class WorkLog < ActiveRecord::Base
       r.task.recalculate_worked_minutes
       r.task.save
     end
-
   }
 
   after_create { |r|

@@ -178,7 +178,7 @@ class TaskRecord < AbstractTask
   # as unread for user.
   ###
   def set_task_read(user, read = true)
-    self.task_users.where(:user_id=> user.id).update_all(:unread => !read)
+    #self.task_users.where(:user_id=> user.id).update_all(:unread => !read)
   end
 
   ###

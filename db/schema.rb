@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20161121131056) do
+ActiveRecord::Schema.define(:version => 20180226114102) do
 
   create_table "access_levels", :force => true do |t|
     t.string   "name"
@@ -60,6 +60,60 @@ ActiveRecord::Schema.define(:version => 20161121131056) do
 
   add_index "companies", ["name"], :name => "companies_name_index"
   add_index "companies", ["subdomain"], :name => "companies_subdomain_index", :unique => true
+
+  create_table "contacts", :force => true do |t|
+    t.string   "name"
+    t.string   "cell"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "cpf"
+    t.string   "oab"
+    t.string   "rg"
+    t.string   "pis"
+    t.string   "nationality"
+    t.string   "work_register"
+    t.string   "profession"
+    t.string   "elector_title"
+    t.date     "birth_date"
+    t.string   "father"
+    t.string   "mother"
+    t.string   "website"
+    t.text     "observations"
+    t.string   "address_street"
+    t.string   "address_complement"
+    t.string   "address_neighbourhood"
+    t.string   "address_zip"
+    t.string   "address_city"
+    t.string   "address_state"
+    t.string   "address_phone"
+    t.string   "charge_street"
+    t.string   "charge_complement"
+    t.string   "charge_neighbourhood"
+    t.string   "charge_zip"
+    t.string   "charge_city"
+    t.string   "charge_state"
+    t.string   "charge_phone"
+    t.string   "commerce_street"
+    t.string   "commerce_complement"
+    t.string   "commerce_neighbourhood"
+    t.string   "commerce_zip"
+    t.string   "commerce_city"
+    t.string   "commerce_state"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.string   "commerce_phone"
+    t.string   "category"
+    t.boolean  "is_company"
+    t.boolean  "is_person"
+    t.string   "contact"
+    t.string   "acronym"
+    t.string   "phone2"
+    t.string   "phone3"
+    t.string   "marital_state"
+    t.boolean  "client"
+    t.boolean  "provider"
+    t.string   "bond"
+  end
 
   create_table "custom_attribute_choices", :force => true do |t|
     t.integer  "custom_attribute_id"

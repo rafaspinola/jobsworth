@@ -1,0 +1,321 @@
+<%= form_for(@contact, :html => {:class => "form-horizontal"})  do |f| %>
+  <div class="tab-content">
+    <div class="tab-pane active" id="main-pane">
+  <% if @contact.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+
+      <ul>
+      <% @contact.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#general-pane" data-toggle="tab">Dados Pessoais</a>
+      </li>
+      <li>
+        <a href="#doctos-pane" data-toggle="tab">Documentos</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="general-pane">
+      <div class="control-group">
+        <%= f.label "Nome" %>
+        <div class="controls">
+          <%= f.text_field :name %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Sigla" %>
+        <div class="controls">
+          <%= f.text_field :acronym %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Pessoa Física" %>
+        <div class="controls">
+          <%= f.check_box :is_person %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Pessoa Jurídica" %>
+        <div class="controls">
+          <%= f.check_box :is_company %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Cliente" %>
+        <div class="controls">
+          <%= f.check_box :client %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Fornecedor" %>
+        <div class="controls">
+          <%= f.check_box :provider %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Celular" %>
+        <div class="controls">
+          <%= f.text_field :cell %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Fone 1" %>
+        <div class="controls">
+          <%= f.text_field :phone %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Fone 2" %>
+        <div class="controls">
+          <%= f.text_field :phone2 %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Fone 3 (fax)" %>
+        <div class="controls">
+          <%= f.text_field :phone3 %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "e-Mail" %>
+        <div class="controls">
+          <%= f.text_field :email %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Site" %>
+        <div class="controls">
+          <%= f.text_field :website %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Categoria" %>
+        <div class="controls">
+          <%= f.text_field :category %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Contato" %>
+        <div class="controls">
+          <%= f.text_field :contact %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Vínculo" %>
+        <div class="controls">
+          <%= f.text_field :bond %>
+        </div>
+      </div>
+      <div>
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#address-pane" data-toggle="tab">Endereço</a>
+          </li>
+          <li>
+            <a href="#cobranca-pane" data-toggle="tab">Cobrança</a>
+          </li>
+          <li>
+            <a href="#comercial-pane" data-toggle="tab">Comercial</a>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane active" id="address-pane">
+          <div class="control-group">
+            <%= f.label "Rua/Número" %>
+            <div class="controls"><%= f.text_field :address_street %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Complemento" %>
+            <div class="controls"><%= f.text_field :address_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Bairro" %>
+            <div class="controls"><%= f.text_field :address_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "CEP" %>
+            <div class="controls"><%= f.text_field :address_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Cidade" %>
+            <div class="controls"><%= f.text_field :address_city %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Estado" %>
+            <div class="controls"><%= f.text_field :address_state %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Telefone" %>
+            <div class="controls"><%= f.text_field :address_phone %></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="cobranca-pane">
+          <div class="control-group">
+            <%= f.label "Rua/Número" %>
+            <div class="controls"><%= f.text_field :charge_street %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Complemento" %>
+            <div class="controls"><%= f.text_field :charge_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Bairro" %>
+            <div class="controls"><%= f.text_field :charge_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "CEP" %>
+            <div class="controls"><%= f.text_field :charge_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Cidade" %>
+            <div class="controls"><%= f.text_field :charge_city %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Estado" %>
+            <div class="controls"><%= f.text_field :charge_state %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Telefone" %>
+            <div class="controls"><%= f.text_field :charge_phone %></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="comercial-pane">
+          <div class="control-group">
+            <%= f.label "Rua/Número" %>
+            <div class="controls"><%= f.text_field :commerce_street %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Complemento" %>
+            <div class="controls"><%= f.text_field :commerce_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Bairro" %>
+            <div class="controls"><%= f.text_field :commerce_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "CEP" %>
+            <div class="controls"><%= f.text_field :commerce_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Cidade" %>
+            <div class="controls"><%= f.text_field :commerce_city %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Estado" %>
+            <div class="controls"><%= f.text_field :commerce_state %></div>
+          </div>
+          <div class="control-group">
+            <%= f.label "Telefone" %>
+            <div class="controls"><%= f.text_field :commerce_phone %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="doctos-pane">
+     <div class="control-group">
+        <%= f.label "CPF/CNPJ" %>
+        <div class="controls">
+          <%= f.text_field :cpf %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Estado Civil" %>
+        <div class="controls">
+          <%= f.text_field :marital_state %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "OAB" %>
+        <div class="controls">
+          <%= f.text_field :oab %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "RG" %>
+        <div class="controls">
+          <%= f.text_field :rg %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "PIS" %>
+        <div class="controls">
+          <%= f.text_field :pis %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Nacionalidade" %>
+        <div class="controls">
+          <%= f.text_field :nationality %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Carteira de Trabalho" %>
+        <div class="controls">
+          <%= f.text_field :work_register %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Profissão" %>
+        <div class="controls">
+          <%= f.text_field :profession %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Título de Eleitor" %>
+        <div class="controls">
+          <%= f.text_field :elector_title %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Nascido em" %>
+        <div class="controls">
+          <%= f.text_field :birth_date, value: @contact.formatted_birth_date %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Pai" %>
+        <div class="controls">
+          <%= f.text_field :father %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Mãe" %>
+        <div class="controls">
+          <%= f.text_field :mother %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label "Outras informações" %>
+        <div class="controls">
+          <%= f.text_area :observations %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <table style="padding: 0px; margin: 0px; border: 0px;">
+      <tr>
+        <td style="float: left;">
+          <%= f.submit  :class => "btn btn-primary" %>
+          <% end %>
+        </td>
+        <td style="padding-left: 50px;">
+          <%= button_to('Destroy', @contact, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn") if @contact.persisted? %>
+        </td>
+      </tr>
+    </table>
+  </div>
+    </div>
+  </div>
+

@@ -1,0 +1,422 @@
+  <div>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#general-pane" data-toggle="tab">Dados Pessoais</a>
+      </li>
+      <li>
+        <a href="#doctos-pane" data-toggle="tab">Documentos</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <div class="tab-pane active form-horizontal" id="general-pane">
+      <div class="control-group">
+        <%= label_tag "Nome" %>
+        <div class="controls">
+          <%= label_tag @contact.name %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Celular" %>
+        <div class="controls">
+          <%= @contact.cell %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Fone" %>
+        <div class="controls">
+          <%= @contact.phone %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "e-Mail" %>
+        <div class="controls">
+          <%= @contact.email %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Site" %>
+        <div class="controls">
+          <%= @contact.website %>
+        </div>
+      </div>
+      <div>
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#address-pane" data-toggle="tab">Endereço</a>
+          </li>
+          <li>
+            <a href="#cobranca-pane" data-toggle="tab">Cobrança</a>
+          </li>
+          <li>
+            <a href="#comercial-pane" data-toggle="tab">Comercial</a>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane active" id="address-pane">
+          <div class="control-group">
+            <%= label_tag "Rua/Número" %>
+            <div class="controls"><%= @contact.address_street %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Complemento" %>
+            <div class="controls"><%= @contact.address_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Bairro" %>
+            <div class="controls"><%= @contact.address_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "CEP" %>
+            <div class="controls"><%= @contact.address_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Cidade" %>
+            <div class="controls"><%= @contact.address_city %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Estado" %>
+            <div class="controls"><%= @contact.address_state %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Telefone" %>
+            <div class="controls"><%= @contact.address_phone %></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="cobranca-pane">
+          <div class="control-group">
+            <%= label_tag "Rua/Número" %>
+            <div class="controls"><%= @contact.charge_street %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Complemento" %>
+            <div class="controls"><%= @contact.charge_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Bairro" %>
+            <div class="controls"><%= @contact.charge_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "CEP" %>
+            <div class="controls"><%= @contact.charge_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Cidade" %>
+            <div class="controls"><%= @contact.charge_city %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Estado" %>
+            <div class="controls"><%= @contact.charge_state %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Telefone" %>
+            <div class="controls"><%= @contact.charge_phone %></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="comercial-pane">
+          <div class="control-group">
+            <%= label_tag "Rua/Número" %>
+            <div class="controls"><%= @contact.commerce_street %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Complemento" %>
+            <div class="controls"><%= @contact.commerce_complement %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Bairro" %>
+            <div class="controls"><%= @contact.commerce_neighbourhood %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "CEP" %>
+            <div class="controls"><%= @contact.commerce_zip %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Cidade" %>
+            <div class="controls"><%= @contact.commerce_city %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Estado" %>
+            <div class="controls"><%= @contact.commerce_state %></div>
+          </div>
+          <div class="control-group">
+            <%= label_tag "Telefone" %>
+            <div class="controls"><%= @contact.commerce_phone %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="doctos-pane">
+     <div class="control-group">
+        <%= label_tag "CPF" %>
+        <div class="controls">
+          <%= @contact.cpf %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "OAB" %>
+        <div class="controls">
+          <%= @contact.oab %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "RG" %>
+        <div class="controls">
+          <%= @contact.rg %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "PIS" %>
+        <div class="controls">
+          <%= @contact.pis %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Nacionalidade" %>
+        <div class="controls">
+          <%= @contact.nationality %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Carteira de Trabalho" %>
+        <div class="controls">
+          <%= @contact.work_register %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Profissão" %>
+        <div class="controls">
+          <%= @contact.profession %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Título de Eleitor" %>
+        <div class="controls">
+          <%= @contact.elector_title %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Nascido em" %>
+        <div class="controls">
+          <%= @contact.birth_date %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Pai" %>
+        <div class="controls">
+          <%= @contact.father %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Mãe" %>
+        <div class="controls">
+          <%= @contact.mother %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= label_tag "Outras informações" %>
+        <div class="controls">
+          <%= @contact.observations %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @contact.name %>
+</p>
+
+<p>
+  <b>Cell:</b>
+  <%= @contact.cell %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @contact.phone %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @contact.email %>
+</p>
+
+<p>
+  <b>Cpf:</b>
+  <%= @contact.cpf %>
+</p>
+
+<p>
+  <b>Oab:</b>
+  <%= @contact.oab %>
+</p>
+
+<p>
+  <b>Rg:</b>
+  <%= @contact.rg %>
+</p>
+
+<p>
+  <b>Rg:</b>
+  <%= @contact.rg %>
+</p>
+
+<p>
+  <b>Pis:</b>
+  <%= @contact.pis %>
+</p>
+
+<p>
+  <b>Nationality:</b>
+  <%= @contact.nationality %>
+</p>
+
+<p>
+  <b>Work register:</b>
+  <%= @contact.work_register %>
+</p>
+
+<p>
+  <b>Profession:</b>
+  <%= @contact.profession %>
+</p>
+
+<p>
+  <b>Elector title:</b>
+  <%= @contact.elector_title %>
+</p>
+
+<p>
+  <b>Birth date:</b>
+  <%= @contact.birth_date %>
+</p>
+
+<p>
+  <b>Father:</b>
+  <%= @contact.father %>
+</p>
+
+<p>
+  <b>Mother:</b>
+  <%= @contact.mother %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @contact.website %>
+</p>
+
+<p>
+  <b>Observations:</b>
+  <%= @contact.observations %>
+</p>
+
+<p>
+  <b>Address street:</b>
+  <%= @contact.address_street %>
+</p>
+
+<p>
+  <b>Address complement:</b>
+  <%= @contact.address_complement %>
+</p>
+
+<p>
+  <b>Address neighbourhood:</b>
+  <%= @contact.address_neighbourhood %>
+</p>
+
+<p>
+  <b>Address zip:</b>
+  <%= @contact.address_zip %>
+</p>
+
+<p>
+  <b>Address city:</b>
+  <%= @contact.address_city %>
+</p>
+
+<p>
+  <b>Address state:</b>
+  <%= @contact.address_state %>
+</p>
+
+<p>
+  <b>Address phone:</b>
+  <%= @contact.address_phone %>
+</p>
+
+<p>
+  <b>Charge street:</b>
+  <%= @contact.charge_street %>
+</p>
+
+<p>
+  <b>Charge complement:</b>
+  <%= @contact.charge_complement %>
+</p>
+
+<p>
+  <b>Charge neighbourhood:</b>
+  <%= @contact.charge_neighbourhood %>
+</p>
+
+<p>
+  <b>Charge zip:</b>
+  <%= @contact.charge_zip %>
+</p>
+
+<p>
+  <b>Charge city:</b>
+  <%= @contact.charge_city %>
+</p>
+
+<p>
+  <b>Charge state:</b>
+  <%= @contact.charge_state %>
+</p>
+
+<p>
+  <b>Charge phone:</b>
+  <%= @contact.charge_phone %>
+</p>
+
+<p>
+  <b>Commerce street:</b>
+  <%= @contact.commerce_street %>
+</p>
+
+<p>
+  <b>Commerce complement:</b>
+  <%= @contact.commerce_complement %>
+</p>
+
+<p>
+  <b>Commerce neighbourhood:</b>
+  <%= @contact.commerce_neighbourhood %>
+</p>
+
+<p>
+  <b>Commerce zip:</b>
+  <%= @contact.commerce_zip %>
+</p>
+
+<p>
+  <b>Commerce city:</b>
+  <%= @contact.commerce_city %>
+</p>
+
+<p>
+  <b>Commerce state:</b>
+  <%= @contact.commerce_state %>
+</p>
+
+
+<%= link_to 'Edit', edit_contact_path(@contact) %> |
+<%= link_to 'All contacts', contacts_path %>

@@ -1,0 +1,29 @@
+<legend>Listing contacts</legend>
+
+<p id="notice"><%= notice %></p>
+<%= form_tag(contacts_path, :method => :get) do %>
+    <%= text_field_tag "term" %>
+    <%= submit_tag("Search") %>
+    <%= link_to 'New Contact', new_contact_path, style: "padding-left: 50px;" %>
+<% end %>
+
+<table class="tasklist_table">
+  <tr>
+    <th>Nome</th>
+    <th>Celular</th>
+    <th>Telefone</th>
+    <th>e-Mail</th>
+  </tr>
+
+<% @contacts.each do |contact| %>
+  <tr>
+    <td><%= link_to contact.name, edit_contact_path(contact) %></td>
+    <td><%= contact.cell %></td>
+    <td><%= contact.phone %></td>
+    <td><%= contact.email %></td>
+  </tr>
+<% end %>
+</table>
+
+
+

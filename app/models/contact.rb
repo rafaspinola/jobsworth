@@ -1,6 +1,8 @@
 class Contact < ActiveRecord::Base
 
-  scope :search_name, lambda { |name| where("name like ?", "%#{name}%")}
+  default_scope order("updated_at desc")
+  
+  scope :search_name, lambda { |name| where("name like ?", "%#{name}%").order(:name)}
 
   def formatted_birth_date
     self.birth_date.strftime("%d/%m/%Y") unless self.birth_date == nil

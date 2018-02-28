@@ -2,9 +2,12 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.where(nil)
-    @contacts = @contacts.search_name(params[:term]) if params[:term].present?
-
+    if params[:term].present?
+      @contacts = Contact.search_name(params[:term])
+    else
+      @contacts = Contact.order("updated_at desc")
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @contacts }

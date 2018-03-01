@@ -34,14 +34,8 @@ namespace :deploy do
 
   namespace :assets do
     task :precompile, :roles => :web, :except => { :no_release => true } do
-      run_locally("rm -rf public/assets/*")
-      run_locally("bundle exec rake assets:precompile")
-      servers = find_servers_for_task(current_task)
-#      port_option = " -e 'ssh -p 22' "
-#      port_option = ""
-      servers.each do |server|
-        run_locally("rsync --recursive --times --rsh=ssh --compress --human-readable #{port_option} --progress public/assets #{user}@#{server}:#{shared_path}")
-      end
+      run("rake assets:clean")
+      run("rake assets:precompile")
     end
   end  
 end

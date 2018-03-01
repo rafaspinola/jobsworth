@@ -127,6 +127,7 @@ Jobsworth::Application.routes.draw do
 
   match 'api/scm/:provider/:secret_key' => 'scm_changesets#create'
   match ':controller/service.wsdl', :action => 'wsdl'
+  match 'parse_time' => 'work_logs#parse_time'
 
   resources :projects, :customers, :property_values do
     resources :score_rules

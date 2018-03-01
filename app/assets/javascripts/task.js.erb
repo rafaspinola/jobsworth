@@ -13,3 +13,19 @@ function loadTask(id) {
     jQuery("div#task").show();
   });
 }
+
+function checkHourLimit() {
+  jQuery.get('parse_time?time=' + jQuery('#worktime-dialog input#work_log_duration').val(), function(data, status) {
+    if (data > 240) {
+      if (jQuery('#worktime-dialog div.modal-footer').css('background-color') != "rgb(255, 0, 0)") {
+        jQuery('#worktime-dialog div.modal-footer').css("background-color", "red");
+        jQuery('#worktime-dialog div.modal-footer').prepend('<span id="hourwarning" style="color:white; font-weight: bold; margin-right: 15px;">Duração da atividade supera 4 horas.</span>');
+      }
+    }
+    else
+    {
+      jQuery('#worktime-dialog div.modal-footer').css("background-color", "#f5f5f5")
+      jQuery('#worktime-dialog div.modal-footer #hourwarning').remove();
+    }
+  });
+}

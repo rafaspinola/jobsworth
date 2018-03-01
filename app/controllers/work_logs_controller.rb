@@ -75,6 +75,14 @@ class WorkLogsController < ApplicationController
     redirect_to tasks_path
   end
 
+  def parse_time
+    if params[:time]
+      render :text => TimeParser.parse_time(params[:time])
+    else
+      render :text => "error"
+    end
+  end
+  
   private
 
   # Loads the log using the given params
@@ -90,5 +98,6 @@ class WorkLogsController < ApplicationController
     @log.task = @task
     @log.started_at = Time.now.utc - @log.duration
   end
+
 
 end
